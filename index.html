@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer">
-    
-    <title>For You Darlyn</title>
+    <title>A Study of You | Exhibition of Love</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,400&family=Montserrat:wght@200;300;400&family=Alex+Brush&display=swap" rel="stylesheet">
+    <!-- High-End Editorial Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,700&family=Inter:wght@200;300;400&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* Modern Design Reset & Variable Systems */
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
+        /* =========================================
+           CORE VARIABLES & RESET
+           ========================================= */
+        :root {
+            --bg-dark: #070505;
+            --bg-accent: #170a0c;
+            --text-main: #f4ece6;
+            --text-muted: #a39b98;
+            --accent-red: #8b1e28;
+            --accent-glow: rgba(139, 30, 40, 0.4);
+            --ease-cinematic: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        :root {
-            --bg-gradient: linear-gradient(135deg, #fbf5f5 0%, #f3e1e4 50%, #e8cbd0 100%);
-            --primary-love: #b33951;
-            --secondary-love: #e28f9e;
-            --dark-charcoal: #2c2224;
-            --glass-base: rgba(255, 255, 255, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --shadow-lux: 0 20px 40px rgba(179, 57, 81, 0.08);
-            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom Cursor Enabled */
         }
 
         html {
@@ -33,485 +34,654 @@
         }
 
         body {
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            font-family: 'Montserrat', sans-serif;
-            color: var(--dark-charcoal);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            line-height: 1.8;
-            letter-spacing: 0.5px;
+            line-height: 1.6;
         }
 
-        /* Ambient Floating Particles Background */
-        .heart-particle {
+        ::selection {
+            background: var(--accent-red);
+            color: #fff;
+        }
+
+        /* =========================================
+           CUSTOM CURSOR
+           ========================================= */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-main);
+            border-radius: 50%;
             position: fixed;
-            color: var(--secondary-love);
-            opacity: 0;
+            top: 0; left: 0;
             pointer-events: none;
-            z-index: 0;
-            animation: floatUp 12s linear infinite;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(105vh) scale(0.5) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.4; }
-            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        .cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--text-muted);
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s var(--ease-cinematic), width 0.3s, height 0.3s;
         }
 
-        /* LUXURY INTRO SECTION */
-        #intro-section {
-            position: relative;
+        /* =========================================
+           AMBIENT BACKGROUND MESH
+           ========================================= */
+        .ambient-mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, var(--bg-accent) 0%, var(--bg-dark) 100%);
+        }
+        
+        .glow-orb {
+            position: absolute;
+            width: 60vw; height: 60vw;
+            background: var(--accent-glow);
+            filter: blur(120px);
+            border-radius: 50%;
+            animation: orbFloat 20s infinite alternate linear;
+            opacity: 0.5;
+        }
+
+        .glow-orb:nth-child(2) {
+            background: rgba(40, 10, 15, 0.5);
+            width: 40vw; height: 40vw;
+            right: -10vw; bottom: -10vw;
+            animation-duration: 25s;
+            animation-direction: alternate-reverse;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10vw, -10vh) scale(1.2); }
+        }
+
+        /* =========================================
+           CINEMATIC HERO
+           ========================================= */
+        #hero {
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            text-align: center;
-            padding: 40px;
-            z-index: 2;
-            background: radial-gradient(circle, rgba(251,245,245,0.2) 0%, rgba(243,225,228,0.4) 100%);
-        }
-
-        .intro-container {
-            max-width: 700px;
-            animation: fadeInDown 1.8s var(--transition-smooth);
-        }
-
-        .intro-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 4.5rem;
-            font-weight: 300;
-            font-style: italic;
-            color: var(--primary-love);
-            line-height: 1.2;
-            margin-bottom: 15px;
-        }
-
-        .intro-subtitle {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            color: var(--dark-charcoal);
-            opacity: 0.8;
-            margin-bottom: 40px;
-        }
-
-        .click-btn {
-            background: transparent;
-            color: var(--primary-love);
-            border: 1px solid var(--primary-love);
-            padding: 16px 45px;
-            font-size: 0.9rem;
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            border-radius: 50px;
-            cursor: pointer;
             position: relative;
-            overflow: hidden;
-            transition: var(--transition-smooth);
-            z-index: 1;
         }
 
-        .click-btn::before {
-            content: '';
+        .hero-meta {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            animation: fadeUp 2s 0.5s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4rem, 12vw, 12rem);
+            font-style: italic;
+            font-weight: 400;
+            line-height: 0.9;
+            text-align: center;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--text-main);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title span {
+            display: block;
+            color: var(--text-main);
+            -webkit-text-stroke: 0;
+            transform: translateX(5vw);
+            font-family: 'WindSong', cursive;
+            font-size: clamp(5rem, 15vw, 14rem);
+            margin-top: -4vw;
+            color: var(--accent-red);
+        }
+
+        .scroll-indicator {
             position: absolute;
-            top: 0; left: 0; width: 0%; height: 100%;
-            background: var(--primary-love);
-            transition: var(--transition-smooth);
-            z-index: -1;
-        }
-
-        .click-btn:hover {
-            color: #ffffff;
-            box-shadow: 0 15px 30px rgba(179, 57, 81, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .click-btn:hover::before {
-            width: 100%;
-        }
-
-        /* ENDLESS EDITORIAL SCRAPBOOK */
-        #scrapbook-section {
-            display: none;
-            max-width: 1000px;
-            margin: auto;
-            padding: 100px 24px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .scrapbook-header {
-            text-align: center;
-            padding: 60px 40px;
-            background: var(--glass-base);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            margin-bottom: 120px;
-            box-shadow: var(--shadow-lux);
-            animation: fadeInUp 1.5s var(--transition-smooth);
-        }
-
-        .scrapbook-header h1 {
-            font-family: 'Alex Brush', cursive;
-            font-size: 5rem;
-            color: var(--primary-love);
-            margin-bottom: 25px;
-        }
-
-        .scrapbook-header p {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.6rem;
-            font-style: italic;
-            color: var(--dark-charcoal);
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-
-        /* Infinite Asymmetric Layout Grid */
-        .scrapbook-grid {
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             flex-direction: column;
-            gap: 140px; /* Expansive space between love notes */
-        }
-
-        /* Themed Rows alternating left/right layout */
-        .story-row {
-            display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 50px;
-            width: 100%;
+            gap: 10px;
+            opacity: 0.5;
         }
 
-        .story-row:nth-child(even) {
-            flex-direction: row-reverse;
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--text-main), transparent);
+            animation: scrollLine 2s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
         }
 
-        @media (max-width: 768px) {
-            .story-row, .story-row:nth-child(even) {
-                flex-direction: column;
-                gap: 30px;
-            }
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            50.1% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
         }
 
-        /* Editorial Image & Text Modules */
-        .card-visual {
-            flex: 1;
-            max-width: 440px;
+        /* =========================================
+           KINETIC MARQUEE
+           ========================================= */
+        .marquee-container {
+            width: 100vw;
+            overflow: hidden;
+            padding: 10vh 0;
+            background: var(--bg-dark);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             position: relative;
+            z-index: 5;
         }
 
-        .polaroid {
-            background: #ffffff;
-            padding: 18px 18px 50px 18px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.06);
-            border-radius: 4px;
-            transition: var(--transition-smooth);
+        .marquee-track {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
         }
 
-        .polaroid img {
+        .marquee-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 6vw;
+            font-style: italic;
+            color: var(--text-muted);
+            padding-right: 50px;
+        }
+
+        .marquee-text span {
+            color: var(--accent-red);
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-weight: 200;
+            text-transform: uppercase;
+            font-size: 2vw;
+            vertical-align: middle;
+            margin: 0 30px;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* =========================================
+           EDITORIAL EXHIBITION (THE SCRAPBOOK)
+           ========================================= */
+        .exhibition {
+            padding: 15vh 5vw;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .exhibit-block {
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 8vw;
+            align-items: center;
+            margin-bottom: 25vh;
+        }
+
+        .exhibit-block:nth-child(even) {
+            grid-template-columns: 7fr 5fr;
+        }
+
+        .exhibit-block:nth-child(even) .exhibit-text {
+            order: -1;
+            text-align: right;
+        }
+
+        /* High-End Image Treatment */
+        .exhibit-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        .exhibit-image-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--accent-red);
+            mix-blend-mode: overlay;
+            opacity: 0.2;
+            transition: opacity 1s var(--ease-cinematic);
+        }
+
+        .exhibit-image-wrapper:hover::after {
+            opacity: 0;
+        }
+
+        .exhibit-img {
             width: 100%;
-            height: 400px;
+            height: 70vh;
             object-fit: cover;
-            filter: sepia(10%) contrast(95%);
-            transition: var(--transition-smooth);
+            filter: grayscale(80%) contrast(1.2);
+            transition: transform 2s var(--ease-cinematic), filter 1s var(--ease-cinematic);
         }
 
-        .polaroid:hover img {
-            filter: sepia(0%) contrast(100%);
+        .exhibit-image-wrapper:hover .exhibit-img {
+            transform: scale(1.05);
+            filter: grayscale(0%) contrast(1.1);
         }
 
-        .card-text {
-            flex: 1;
-            padding: 40px;
-            background: var(--glass-base);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow: var(--shadow-lux);
-            transition: var(--transition-smooth);
+        .image-caption {
+            position: absolute;
+            bottom: -30px;
+            right: 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            transform: rotate(-90deg);
+            transform-origin: right bottom;
         }
 
-        .card-text:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.6);
-        }
-
-        .card-text h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            font-weight: 400;
-            color: var(--primary-love);
+        /* Typography Treatment */
+        .exhibit-meta {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: var(--accent-red);
+            letter-spacing: 4px;
+            text-transform: uppercase;
             margin-bottom: 20px;
-            border-bottom: 1px solid rgba(179, 57, 81, 0.15);
-            padding-bottom: 10px;
+            display: block;
         }
 
-        .card-text p {
-            font-size: 0.95rem;
-            color: #443739;
-            margin-bottom: 15px;
-        }
-
-        .card-text p.poetry-line {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-style: italic;
-            color: var(--primary-love);
-            border-left: 2px solid var(--secondary-love);
-            padding-left: 15px;
-            margin: 20px 0;
-        }
-
-        .heart-icon {
-            display: inline-block;
-            color: var(--primary-love);
-            font-size: 1.2rem;
-            margin-top: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        /* Grand Extended Infinite Prose Section */
-        .prose-interlude {
-            background: transparent;
-            text-align: center;
-            padding: 80px 20px;
-            margin: 60px auto;
-            max-width: 750px;
-        }
-
-        .prose-interlude h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3rem;
-            font-style: italic;
-            font-weight: 300;
-            color: var(--primary-love);
+        .exhibit-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 5vw, 6rem);
+            line-height: 1.1;
             margin-bottom: 30px;
         }
 
-        .prose-interlude p {
+        .exhibit-body {
             font-size: 1.1rem;
             font-weight: 300;
-            color: var(--dark-charcoal);
-            margin-bottom: 25px;
-            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            max-width: 500px;
         }
 
-        /* LUXURY FOOTER */
-        .scrapbook-footer {
-            margin-top: 160px;
+        .exhibit-block:nth-child(even) .exhibit-body {
+            margin-left: auto; /* Align right */
+        }
+
+        .quote-insert {
+            font-family: 'WindSong', cursive;
+            font-size: 3rem;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin: 40px 0;
+        }
+
+        /* =========================================
+           ENDLESS TAPESTRY (MAGAZINE LAYOUT)
+           ========================================= */
+        .editorial-essay {
+            padding: 10vh 5vw;
+            background: #040303;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 5;
+        }
+
+        .essay-header {
             text-align: center;
-            padding: 80px 40px;
-            background: var(--glass-base);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            box-shadow: var(--shadow-lux);
+            margin-bottom: 10vh;
         }
 
-        .scrapbook-footer p {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            max-width: 650px;
-            margin: 0 auto 30px auto;
+        .essay-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-style: italic;
+            opacity: 0.1;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            top: 5vh;
+            pointer-events: none;
         }
 
-        .scrapbook-footer h3 {
-            font-family: 'Alex Brush', cursive;
-            font-size: 3.5rem;
-            color: var(--primary-love);
-            font-weight: 400;
+        .essay-columns {
+            column-count: 2;
+            column-gap: 6vw;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 1.15rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            text-align: justify;
         }
 
-        /* Rotations for organic scrapbook alignment */
-        .rotate-left { transform: rotate(-1.5deg); }
-        .rotate-right { transform: rotate(2deg); }
-        .polaroid:hover { transform: scale(1.02) rotate(0deg); box-shadow: 0 40px 80px rgba(179,57,81,0.12); }
+        .essay-columns p {
+            margin-bottom: 2rem;
+            break-inside: avoid;
+        }
 
-        /* Animation Keyframes */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .essay-columns p:first-child::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            float: left;
+            line-height: 0.8;
+            padding-right: 15px;
+            color: var(--accent-red);
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .exhibit-block, .exhibit-block:nth-child(even) {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .exhibit-block:nth-child(even) .exhibit-text {
+                order: 1;
+                text-align: left;
+            }
+            .exhibit-block:nth-child(even) .exhibit-body {
+                margin-left: 0;
+            }
+            .essay-columns {
+                column-count: 1;
+                text-align: left;
+            }
+            .exhibit-img {
+                height: 50vh;
+            }
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+
+        /* =========================================
+           SCROLL ANIMATION CLASSES
+           ========================================= */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1.2s var(--ease-cinematic), transform 1.2s var(--ease-cinematic);
         }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           LUXURY FOOTER
+           ========================================= */
+        .grand-finale {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        .grand-finale h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 8rem);
+            z-index: 2;
+        }
+
+        .grand-finale .author {
+            margin-top: 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            z-index: 2;
+        }
+
+        /* Big background overlay text */
+        .bg-text {
+            position: absolute;
+            font-family: 'Inter', sans-serif;
+            font-size: 25vw;
+            font-weight: 800;
+            color: rgba(255,255,255,0.02);
+            line-height: 0.8;
+            z-index: 1;
+            pointer-events: none;
+        }
+
     </style>
 </head>
-
 <body>
 
-<div id="particle-container"></div>
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
 
-<section id="intro-section">
-    <div class="intro-container">
-        <h1 class="intro-title">Finally, you came…</h1>
-        <h2 class="intro-subtitle">I’ve written a universe for you.</h2>
-        <button class="click-btn" id="revealBtn">Enter My Heart</button>
+    <!-- AMBIENT MESH -->
+    <div class="ambient-mesh">
+        <div class="glow-orb"></div>
+        <div class="glow-orb"></div>
     </div>
-</section>
 
-<main id="scrapbook-section">
-
-    <header class="scrapbook-header">
-        <h1>To the one who owns my thoughts</h1>
-        <p>
-            If love had a shape, it would look like you. If peace had a voice, it would sound like you. 
-            And if my heart had a home… it would be forever found within you.
-        </p>
+    <!-- HERO SECTION -->
+    <header id="hero">
+        <div class="hero-meta">A Digital Exhibition • Vol. I</div>
+        <h1 class="hero-title">
+            The Architecture 
+            <span>of Us</span>
+        </h1>
+        
+        <div class="scroll-indicator">
+            <span style="font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;">Descend</span>
+            <div class="scroll-line"></div>
+        </div>
     </header>
 
-    <div class="scrapbook-grid">
-
-        <div class="story-row">
-            <div class="card-visual">
-                <div class="polaroid rotate-left">
-                    <img src="xBTtJNl%20-%20Imgur.jpg" alt="Memory One">
-                </div>
+    <!-- KINETIC MARQUEE 1 -->
+    <section class="marquee-container interactive-hover">
+        <div class="marquee-track">
+            <div class="marquee-text">
+                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span> 
+                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span>
             </div>
-            <div class="card-text">
-                <h3>The Moment You Exist</h3>
-                <p>Every time I see you, the world feels softer. Like everything loud inside me finally calms down. You are not just beautiful — you are the definition of comfort in human form.</p>
-                <p class="poetry-line">"In a room full of art, my eyes would still only look for you."</p>
-                <p>I find myself tracing your smile in my memory when you're gone, realizing how effortlessly you have re-written the landscape of my life.</p>
-                <span class="heart-icon">♥</span>
+            <!-- Duplicate for infinite scroll loop -->
+            <div class="marquee-text">
+                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span> 
+                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span>
             </div>
         </div>
+    </section>
 
-        <div class="story-row">
-            <div class="card-visual">
-                <div class="polaroid rotate-right">
-                    <img src="AbmCfZ2%20-%20Imgur.jpg" alt="Memory Two">
-                </div>
+    <!-- MAIN EXHIBITION -->
+    <main class="exhibition">
+
+        <!-- ARTIFACT 01 -->
+        <article class="exhibit-block reveal-up">
+            <div class="exhibit-image-wrapper interactive-hover">
+                <img src="xBTtJNl%20-%20Imgur.jpg" alt="Memory" class="exhibit-img">
+                <div class="image-caption">Fig. 01 — The Genesis</div>
             </div>
-            <div class="card-text">
-                <h3>Your Silent Magic</h3>
-                <p>You don’t even realize it, but your presence changes everything. The way you exist is like poetry that doesn’t need words. I find myself memorizing your details without even trying.</p>
-                <p>The gentle inflection of your voice, the warmth that radiates when you walk into a room—it's a quiet sorcery that grounds me completely.</p>
-                <p class="poetry-line">"You are my favorite coincidence in a world full of noise."</p>
-                <span class="heart-icon">♥</span>
+            <div class="exhibit-text">
+                <span class="exhibit-meta">Artifact 01</span>
+                <h2 class="exhibit-title">The Moment<br>You Existed</h2>
+                <p class="exhibit-body">
+                    Every time I see you, the world feels softer. It is as if the chaotic frequency of the universe is suddenly dialed down into a quiet hum. You are not just beautiful—you are the exact definition of comfort, rendered in human form. 
+                </p>
+                <p class="exhibit-body">
+                    I used to think peace was a place. Now I know it is a person. 
+                </p>
+                <div class="quote-insert">"My eyes would still only look for you."</div>
             </div>
+        </article>
+
+        <!-- ARTIFACT 02 -->
+        <article class="exhibit-block reveal-up">
+            <div class="exhibit-text">
+                <span class="exhibit-meta">Artifact 02</span>
+                <h2 class="exhibit-title">Your Silent<br>Sorcery</h2>
+                <p class="exhibit-body">
+                    You don’t even realize it, do you? The way your mere presence shifts the gravity in the room. The way you exist is a living breathing poetry that requires no translation. 
+                </p>
+                <p class="exhibit-body">
+                    I find myself studying the micro-expressions on your face, memorizing the typography of your smile. It is an unconscious devotion. You have quietly rewired the way I perceive joy.
+                </p>
+            </div>
+            <div class="exhibit-image-wrapper interactive-hover">
+                <img src="AbmCfZ2%20-%20Imgur.jpg" alt="Memory" class="exhibit-img">
+                <div class="image-caption">Fig. 02 — The Anchor</div>
+            </div>
+        </article>
+
+        <!-- ARTIFACT 03 -->
+        <article class="exhibit-block reveal-up">
+            <div class="exhibit-image-wrapper interactive-hover">
+                <img src="GHKaV5z%20-%20Imgur.png" alt="Memory" class="exhibit-img">
+                <div class="image-caption">Fig. 03 — The Light</div>
+            </div>
+            <div class="exhibit-text">
+                <span class="exhibit-meta">Artifact 03</span>
+                <h2 class="exhibit-title">The Breaking<br>Dawn</h2>
+                <p class="exhibit-body">
+                    Even on my heaviest days, when the world demands too much, a single thought of you acts as a lighthouse. You became my calm without asking, without forcing. 
+                </p>
+                <div class="quote-insert">"I never want to go back to who I was before you."</div>
+                <p class="exhibit-body">
+                    You didn’t just enter my life; you illuminated its dark corners. You showed me the brilliance of sharing existence with a soul that completely, unconditionally understands yours.
+                </p>
+            </div>
+        </article>
+
+        <!-- ARTIFACT 04 -->
+        <article class="exhibit-block reveal-up">
+            <div class="exhibit-text">
+                <span class="exhibit-meta">Artifact 04</span>
+                <h2 class="exhibit-title">The Concept<br>of Forever</h2>
+                <p class="exhibit-body">
+                    I do not know the exact coordinates of our future. But I know the trajectory. If forever is a place, its roads will endlessly loop back to you and me. 
+                </p>
+                <p class="exhibit-body">
+                    I want to build worlds with you. I want to weather the storms and stand quietly in the golden hours of our life together, looking back at the masterpiece we constructed simply by choosing each other.
+                </p>
+            </div>
+            <div class="exhibit-image-wrapper interactive-hover">
+                <img src="e8Ww4Dx%20-%20Imgur.png" alt="Memory" class="exhibit-img">
+                <div class="image-caption">Fig. 04 — The Eternity</div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- ENDLESS TAPESTRY OF TEXT (EDITORIAL ESSAY) -->
+    <section class="editorial-essay reveal-up">
+        <div class="essay-header">
+            <h2>Infinite Tapestry</h2>
         </div>
-
-        <div class="prose-interlude">
-            <h2>The Symphony of Us</h2>
-            <p>Sometimes, I stop and think about how vast the universe is. Billions of years, countless constellations, and an infinite stretch of time. Yet, somehow, my timeline aligned perfectly with yours. I got to exist at the exact same time as you, walk the same earth, and share the same air.</p>
-            <p>That is not luck. That is a quiet miracle. Loving you feels less like an choice and more like a profound remembering—as if my heart knew yours long before we ever met.</p>
-            <span class="heart-icon" style="font-size:2rem;">♡</span>
+        <div class="essay-columns">
+            <p>
+                If I could offer you one impossible gift, it would be my eyes. Just for five minutes. I would want you to step inside my mind and look at yourself the exact way that I look at you. You spend so much time analyzing your perceived flaws, while I spend my time staring at them as if they are the intentional, masterful brushstrokes of a Renaissance painting. There is a geometry to the way you move, a specific cadence to your laugh that I have mapped out in the deepest parts of my memory. 
+            </p>
+            <p>
+                To love you is not a passive event. It is an active, ongoing phenomenon. I love the intricate labyrinth of your thoughts. I love how you feel things with such terrifying depth, and yet you carry yourself with this effortless, floating grace. You are a sanctuary in a world that rarely stops spinning.
+            </p>
+            <p>
+                Sometimes I think about the sheer mathematical improbability of us. Think about the billions of years of cosmic expansion, the countless civilizations rising and falling, the sheer infinite stretch of human history. Yet, out of all the timelines, out of all the centuries, my timeline collided with yours. We get to exist right now, breathing the same air, under the exact same sky. That is not a coincidence. That is a deliberate act of the universe. 
+            </p>
+            <p>
+                And because of that, my devotion to you is not just a feeling—it is a vow. I do not promise absolute perfection, because human hands are inherently flawed. I do not promise days without rain. But I promise the umbrella. I promise my absolute presence. I promise to be the person who stays, who fights, who listens, and who chooses you over and over again, in every single version of reality, until the stars burn out.
+            </p>
         </div>
+    </section>
 
-        <div class="story-row">
-            <div class="card-visual">
-                <div class="polaroid rotate-left">
-                    <img src="GHKaV5z%20-%20Imgur.png" alt="Memory Three">
-                </div>
-            </div>
-            <div class="card-text">
-                <h3>My Favorite Thought</h3>
-                <p>Even on my worst days, thinking about you feels like light breaking through dark clouds. You became my calm without even asking to. And somehow… I never want to go back to who I was before you.</p>
-                <p class="poetry-line">"You are the peace I look for in a chaotic world."</p>
-                <p>You didn't fix me, because I wasn't broken. Instead, you illuminated the corners of my soul that I forgot how to love, showing me how beautiful life could be when shared.</p>
-                <span class="heart-icon">♥</span>
-            </div>
-        </div>
-
-        <div class="story-row">
-            <div class="card-visual">
-                <div class="polaroid rotate-right">
-                    <img src="e8Ww4Dx%20-%20Imgur.png" alt="Memory Four">
-                </div>
-            </div>
-            <div class="card-text">
-                <h3>If Forever Exists</h3>
-                <p>I don’t know what the future holds, but I know that if forever had a direction, it would always find its way back to you and me. Through every turning season, your name is the one written in my heart.</p>
-                <p>Time has a way of moving too fast when I am with you, and too slow when we are apart. I want to build worlds with you.</p>
-                <p class="poetry-line">"With you, forever doesn't feel long enough."</p>
-                <span class="heart-icon">♥</span>
-            </div>
-        </div>
-
-        <div class="prose-interlude">
-            <h2>The Architecture of My Heart</h2>
-            <p>If I could give you one thing in life, I would give you the ability to see yourself through my eyes. Only then would you realize how completely irreplaceable you are. You look at your flaws; I look at them as the strokes of a masterpiece.</p>
-            <p>I love the way you think, the way you feel things so deeply, and the effortless grace you carry even when life gets heavy. You are a sanctuary. Every word written here is just a tiny fragment of a feeling that stretches beyond the margins of this screen.</p>
-        </div>
-
-        <div class="story-row">
-            <div class="card-text" style="max-width: 100%; flex: none;">
-                <h3>A Promise Stamped in Time</h3>
-                <p>I love you not only for who you are, but for who I am when I am with you. You make me want to reach higher, love deeper, and live more intentionally. This love isn't just a collection of sweet words; it is an anchor. It is a decision I make happily every single morning when I wake up, and every single evening before I close my eyes.</p>
-                <p class="poetry-line">"You are my today, my tomorrow, and all of my remaining passings of time."</p>
-                <p>No matter where the wind takes us, or what stories life decides to write for us, please always remember this: you are valued, you are fiercely protected, and you are loved beyond measure.</p>
-                <span class="heart-icon">♥</span>
-            </div>
-        </div>
-
-    </div>
-
-    <footer class="scrapbook-footer">
-        <p>
-            I don’t promise absolute perfection. I don’t promise easy days without storm. 
-            But I promise absolute presence — always staying, always fighting, always choosing you in every single version of life.
-        </p>
-        <h3>
-            you are my favorite place in this world<br>
-            <span style="font-family:'Montserrat'; font-size:0.9rem; text-transform:uppercase; letter-spacing:3px; display:block; margin-top:15px; opacity:0.7;">— orxnge</span>
-        </h3>
+    <!-- GRAND FINALE -->
+    <footer class="grand-finale reveal-up">
+        <div class="bg-text">ALWAYS</div>
+        <h1>You are my favorite<br>place in this world.</h1>
+        <div class="author">— orxnge</div>
     </footer>
 
-</main>
+    <!-- INTERACTION SCRIPTS -->
+    <script>
+        // Custom Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        const hoverElements = document.querySelectorAll('.interactive-hover, a, button');
 
-<script>
-// Smooth reveal trigger
-document.getElementById('revealBtn').addEventListener('click', function() {
-    document.getElementById('intro-section').style.display = 'none';
-    document.getElementById('scrapbook-section').style.display = 'block';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-});
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
 
-// Premium Visuals: Generate floating background hearts gracefully
-function createHeartParticles() {
-    const container = document.getElementById('particle-container');
-    const heartSymbols = ['♥', '♡', '❤', '💕'];
-    
-    // Generate a heart every 800ms for continuous life
-    setInterval(() => {
-        if(document.getElementById('scrapbook-section').style.display === 'block' || window.scrollY < window.innerHeight) {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-particle');
-            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            // Instantly move the dot
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Slightly delay the ring for cinematic drag effect
+            cursorRing.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Hover effect for images and interactive elements
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorRing.style.width = '80px';
+                cursorRing.style.height = '80px';
+                cursorRing.style.borderColor = 'var(--accent-red)';
+                cursorRing.style.backgroundColor = 'var(--accent-glow)';
+                cursorDot.style.opacity = '0';
+            });
             
-            // Random dynamic sizing and positioning
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = Math.random() * (24 - 12) + 12 + 'px';
-            heart.style.animationDuration = Math.random() * (16 - 8) + 8 + 's';
-            
-            container.appendChild(heart);
-            
-            // Cleanup to maintain ultra-fast performance
-            setTimeout(() => {
-                heart.remove();
-            }, 16000);
-        }
-    }, 700);
-}
+            el.addEventListener('mouseleave', () => {
+                cursorRing.style.width = '40px';
+                cursorRing.style.height = '40px';
+                cursorRing.style.borderColor = 'var(--text-muted)';
+                cursorRing.style.backgroundColor = 'transparent';
+                cursorDot.style.opacity = '1';
+            });
+        });
 
-createHeartParticles();
-</script>
+        // Scroll Reveal Logic (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal-up');
 
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -100px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+    </script>
 </body>
 </html>
