@@ -3,24 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Epoch of Us | Final Production</title>
+    <title>The Singularity | Final Boss</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syncopate:wght@400;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
-           CORE CONFIGURATION & FRAMING CONTROLS
+           THE SINGULARITY CONFIGURATION
            ========================================= */
         :root {
-            --bg-void: #050505;
-            --text-stardust: #f0ebe1;
-            --accent-crimson: #8a1c25;
-            --accent-gold: #d4af37;
-            --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
-
-            /* TUNING CONTROLS: Change these percentages to align her face perfectly.
-               0% = Top of image, 50% = Dead Center, 100% = Bottom of image
-            */
+            --void: #030303;
+            --stardust: #f5f2eb;
+            --crimson: #9e1313;
+            --gold: #e0c386;
             --hero-focus: center 25%;
             --card-1-focus: center 20%;
             --card-2-focus: center 50%;
@@ -29,455 +24,386 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
         
-        body, html {
-            width: 100%;
-            background-color: var(--bg-void);
-            color: var(--text-stardust);
+        /* The body height creates the "track" for our 3D scroll */
+        body {
+            background-color: var(--void);
+            color: var(--stardust);
             font-family: 'Cormorant Garamond', serif;
+            height: 600vw; /* Massive scroll height for 3D travel */
             overflow-x: hidden;
-            overscroll-behavior: none;
+            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
         }
 
-        .svg-filters { position: absolute; width: 0; height: 0; pointer-events: none; }
+        /* Ambient animated noise */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+            opacity: 0.04; pointer-events: none; z-index: 100;
+        }
 
         /* =========================================
-           CINEMATIC LOADER
+           CUSTOM COMBAT CURSOR
            ========================================= */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: var(--bg-void); z-index: 10000;
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column; transition: transform 1.2s var(--ease-cinematic);
-        }
-        .loader-text {
-            font-family: 'Syncopate', sans-serif; font-size: 8vw; font-weight: 700;
-            color: transparent; -webkit-text-stroke: 1px var(--accent-gold);
-            position: relative; overflow: hidden;
-        }
-        .loader-fill {
-            position: absolute; top: 0; left: 0; height: 100%; width: 0%;
-            background: var(--accent-gold); mix-blend-mode: screen; transition: width 0.1s linear;
-        }
-        .loader-meta { font-family: 'Syncopate', sans-serif; font-size: 10px; letter-spacing: 8px; margin-top: 20px; color: var(--accent-gold); }
-
-        /* =========================================
-           CANVAS BACKGROUND
-           ========================================= */
-        #canvas-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
-
-        /* =========================================
-           MAGNETIC FLUID CURSOR
-           ========================================= */
-        .cursor-aura {
-            position: fixed; width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5);
+        #cursor-scanner {
+            position: fixed; width: 60px; height: 60px; border: 1px solid var(--gold);
             border-radius: 50%; pointer-events: none; z-index: 9999;
-            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, background 0.3s;
-            display: flex; justify-content: center; align-items: center; font-family: 'Syncopate', sans-serif; font-size: 8px; color: transparent;
+            transform: translate(-50%, -50%); transition: width 0.4s, height 0.4s;
+            display: flex; justify-content: center; align-items: center; mix-blend-mode: difference;
         }
-        .cursor-dot {
-            position: fixed; width: 4px; height: 4px; background: var(--text-stardust);
+        #cursor-scanner::after { content: '+'; font-family: 'Space Mono'; color: var(--gold); font-size: 12px; }
+        #cursor-dot {
+            position: fixed; width: 4px; height: 4px; background: var(--crimson);
             border-radius: 50%; pointer-events: none; z-index: 10000;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--crimson);
         }
 
         /* =========================================
-           SMOOTH SCROLL WRAPPER
+           3D SPATIAL CAMERA & SCENE
            ========================================= */
-        #smooth-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; overflow: hidden; z-index: 1; }
-        #smooth-content { will-change: transform; width: 100%; }
+        #viewport {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            perspective: 1200px; /* The focal length of our 3D world */
+            overflow: hidden; pointer-events: none;
+        }
+        #scene {
+            width: 100%; height: 100%; position: absolute;
+            transform-style: preserve-3d; will-change: transform;
+        }
 
         /* =========================================
-           HERO SECTION
+           3D ARTIFACTS (THE CARDS)
            ========================================= */
-        .hero { height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
-        .hero-text-wrap { text-align: center; perspective: 1000px; z-index: 2; }
-        .hero-title {
-            font-family: 'Cinzel', serif; font-size: 10vw; line-height: 0.85;
-            text-transform: uppercase; mix-blend-mode: exclusion;
+        .artifact {
+            position: absolute; top: 50%; left: 50%; width: 80vw; height: 70vh;
+            margin-left: -40vw; margin-top: -35vh; display: flex; align-items: center;
+            justify-content: space-between; transform-style: preserve-3d;
+            opacity: 0; /* Faded until camera approaches */
+            transition: opacity 0.5s ease-out;
         }
-        .title-line { display: block; overflow: hidden; }
-        .title-line span { display: inline-block; transform: translateY(100%); transition: transform 1.2s var(--ease-cinematic); }
-        .hero.active .title-line span { transform: translateY(0); }
         
-        .hero-image-center {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8) rotate(-2deg);
-            width: 25vw; height: 35vw; object-fit: cover; z-index: 1; opacity: 0; transition: all 2s var(--ease-cinematic);
-            filter: grayscale(100%);
-            object-position: var(--hero-focus); /* Position Override */
-        }
-        .hero.active .hero-image-center { opacity: 0.35; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        .artifact:nth-child(even) { flex-direction: row-reverse; }
 
-        /* =========================================
-           SPATIAL GALLERY (LIQUID DISTORTION)
-           ========================================= */
-        .gallery-space { padding: 15vh 0; display: flex; flex-direction: column; gap: 25vh; }
-        .gallery-item {
-            display: flex; align-items: center; justify-content: space-between; padding: 0 10vw;
-            perspective: 1000px;
+        .image-pod {
+            width: 30vw; height: 60vh; position: relative;
+            transform: translateZ(100px); /* Pops out from text */
+            box-shadow: 0 0 50px rgba(0,0,0,0.9); border: 1px solid rgba(224, 195, 134, 0.2);
+            overflow: hidden;
         }
-        .gallery-item:nth-child(even) { flex-direction: row-reverse; }
         
-        .image-wrapper {
-            width: 35vw; height: 50vh; position: relative;
-            filter: url(#liquid-distortion);
-            transition: transform 0.4s ease-out;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        /* Dynamic Flashlight Overlay */
+        .flashlight {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle 300px at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.1), transparent);
+            z-index: 5; mix-blend-mode: overlay; pointer-events: none;
         }
-        .image-wrapper img {
+
+        .image-pod img {
             width: 100%; height: 100%; object-fit: cover;
-            filter: grayscale(80%) contrast(1.1); transition: filter 0.8s, transform 0.8s;
+            filter: grayscale(100%) contrast(1.2); transition: filter 1s ease;
         }
-        .image-wrapper:hover img { filter: grayscale(0%) contrast(1); transform: scale(1.02); }
+        .artifact:hover .image-pod img { filter: grayscale(0%) contrast(1); }
         
-        /* Individual framing overrides mapping to our root focus positions */
-        .gallery-item:nth-child(1) .image-wrapper img { object-position: var(--card-1-focus); }
-        .gallery-item:nth-child(2) .image-wrapper img { object-position: var(--card-2-focus); }
-        .gallery-item:nth-child(3) .image-wrapper img { object-position: var(--card-3-focus); }
+        /* Image Positioning Overrides */
+        #art-0 .image-pod img { object-position: var(--hero-focus); width: 25vw; height: 35vw; border-radius: 200px; }
+        #art-1 .image-pod img { object-position: var(--card-1-focus); }
+        #art-2 .image-pod img { object-position: var(--card-2-focus); }
+        #art-3 .image-pod img { object-position: var(--card-3-focus); }
 
-        .image-wrapper::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(138, 28, 37, 0.15); mix-blend-mode: overlay; pointer-events: none;
+        .text-pod { width: 40vw; transform: translateZ(50px); pointer-events: auto; }
+        
+        .data-stream { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 5px; color: var(--gold); display: block; margin-bottom: 20px; text-transform: uppercase; }
+        
+        /* Chromatic Aberration Target */
+        .kinetic-title {
+            font-family: 'Cinzel', serif; font-size: 6vw; line-height: 0.9; margin-bottom: 30px; text-transform: uppercase;
+            position: relative; white-space: nowrap; transition: text-shadow 0.1s linear;
         }
-
-        .text-wrapper { width: 40vw; z-index: 2; }
-        .text-meta { font-family: 'Syncopate', sans-serif; font-size: 10px; letter-spacing: 4px; color: var(--accent-gold); display: block; margin-bottom: 20px; }
-        .text-title { font-family: 'Cinzel', serif; font-size: 3.5vw; line-height: 1.1; margin-bottom: 30px; text-transform: uppercase; }
-        .text-body { font-size: 1.3vw; line-height: 1.6; color: rgba(240, 235, 225, 0.8); }
+        .text-body { font-size: 1.4vw; line-height: 1.6; color: rgba(245, 242, 235, 0.7); max-width: 80%; }
 
         /* =========================================
-           POETRY WALL
+           HUD (Heads Up Display)
            ========================================= */
-        .poetry-void { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0 10vw; }
-        .poetry-text {
-            font-size: 4.5vw; text-align: center; line-height: 1.2;
-            font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(255,255,255,0.1);
-            background: linear-gradient(to right, var(--text-stardust) 50%, rgba(255,255,255,0.1) 50%);
-            background-size: 200% 100%; background-position: 100% 0;
-            -webkit-background-clip: text; transition: background-position 0.1s linear;
+        .hud {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;
+            padding: 40px; display: flex; justify-content: space-between; flex-direction: column;
         }
+        .hud-top, .hud-bottom { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(224, 195, 134, 0.5); text-transform: uppercase; letter-spacing: 2px; }
+        .progress-bar { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--crimson); width: 0%; transition: width 0.1s linear; }
 
         /* =========================================
-           FINALE BUTTON
+           THE SINGULARITY FINAL PORTAL
            ========================================= */
-        .finale { height: 80vh; display: flex; align-items: center; justify-content: center; }
-        .magnetic-btn {
-            position: relative; display: inline-block; padding: 30px 60px; border: 1px solid var(--accent-gold);
-            border-radius: 100px; text-transform: uppercase; font-family: 'Syncopate', sans-serif; letter-spacing: 3px;
-            color: var(--text-stardust); text-decoration: none; overflow: hidden; background: transparent;
-            transition: background 0.3s, color 0.3s; z-index: 10;
+        #portal-btn {
+            pointer-events: auto; background: transparent; color: var(--gold); border: 1px solid var(--gold);
+            padding: 20px 50px; font-family: 'Space Mono'; font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+            position: relative; overflow: hidden; transition: 0.4s; margin-top: 40px; border-radius: 100px;
         }
-        .magnetic-btn::before {
-            content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
-            background: var(--accent-gold); transition: top 0.4s var(--ease-cinematic); z-index: -1;
+        #portal-btn::before {
+            content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background: var(--gold);
+            transform: translate(-50%, -50%); border-radius: 50%; transition: width 0.6s ease, height 0.6s ease; z-index: -1;
         }
-        .magnetic-btn:hover::before { top: 0; }
-        .magnetic-btn:hover { color: var(--bg-void); font-weight: bold; }
+        #portal-btn:hover { color: var(--void); font-weight: bold; }
+        #portal-btn:hover::before { width: 400px; height: 400px; }
 
-        /* =========================================
-           THE BEAUTIFUL REVEAL (PORTAL)
-           ========================================= */
-        #beautiful-portal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #0a0304; z-index: 1005; display: flex; justify-content: center;
-            align-items: center; flex-direction: column; opacity: 0; pointer-events: none;
-            transition: opacity 1.5s var(--ease-cinematic);
+        #end-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9000;
+            display: flex; justify-content: center; align-items: center; flex-direction: column; opacity: 0; pointer-events: none;
+            transition: opacity 2s ease;
         }
-        #beautiful-portal.active { opacity: 1; pointer-events: auto; }
+        #end-screen.unleashed { opacity: 1; pointer-events: auto; }
         
-        .portal-bg-glow {
-            position: absolute; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(138,28,37,0.3) 0%, transparent 70%);
-            filter: blur(50px); animation: pulsingGlow 8s infinite alternate ease-in-out;
+        .end-script { font-family: 'WindSong', cursive; font-size: 8vw; color: var(--gold); text-shadow: 0 0 20px rgba(224, 195, 134, 0.5); }
+        .end-serif { font-family: 'Cinzel', serif; font-size: 2vw; letter-spacing: 8px; margin-top: 20px; color: var(--stardust); }
+        .glitch-flash {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--crimson);
+            mix-blend-mode: overlay; opacity: 0; z-index: 9001; pointer-events: none;
         }
-        .portal-content { text-align: center; max-width: 70vw; z-index: 2; transform: translateY(40px); transition: transform 2s var(--ease-cinematic); }
-        #beautiful-portal.active .portal-content { transform: translateY(0); }
-        
-        .portal-cursive { font-family: 'WindSong', cursive; font-size: clamp(4rem, 8vw, 10rem); color: var(--accent-gold); margin-bottom: 20px; }
-        .portal-serif { font-family: 'Cinzel', serif; font-size: clamp(1.5rem, 3vw, 4rem); letter-spacing: 6px; text-transform: uppercase; line-height: 1.4; margin-bottom: 40px; }
-        .portal-body { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 2vw, 2.5rem); color: rgba(240, 235, 225, 0.7); max-width: 600px; margin: 0 auto; line-height: 1.5; }
-
-        @keyframes pulsingGlow { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 0.9; } }
 
     </style>
 </head>
 <body>
 
-    <svg class="svg-filters">
-        <filter id="liquid-distortion">
-            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
-            <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-    </svg>
-
-    <div id="loader">
-        <div class="loader-text">
-            <span style="position: relative; z-index: 2;">IGNITING</span>
-            <div class="loader-fill" id="loader-fill"></div>
+    <!-- HUD OVERLAY -->
+    <div class="hud">
+        <div class="hud-top">
+            <span>SYS.STATUS: <span style="color:var(--crimson)">OVERRIDE ENGAGED</span></span>
+            <span>TARGET: THE UNIVERSE OF YOU</span>
         </div>
-        <div class="loader-meta" id="loader-perc">0.00%</div>
+        <div class="hud-bottom">
+            <span>Z-AXIS COORD: <span id="z-coord">0000</span></span>
+            <span>NO ESCAPE. NO HIDING.</span>
+        </div>
+        <div class="progress-bar" id="progress"></div>
     </div>
 
-    <canvas id="canvas-bg"></canvas>
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor-scanner"></div>
+    <div id="cursor-dot"></div>
 
-    <div class="cursor-aura" id="cursor-aura"></div>
-    <div class="cursor-dot" id="cursor-dot"></div>
-
-    <div id="beautiful-portal">
-        <div class="portal-bg-glow"></div>
-        <div class="portal-content">
-            <div class="portal-cursive">Forever Confirmed</div>
-            <h2 class="portal-serif">You are my favorite place in this world.</h2>
-            <p class="portal-body">"In every layout, every line of script, and every corner of this infinite canvas... it always structuralizes back to you."</p>
-        </div>
-    </div>
-
-    <main id="smooth-wrapper">
-        <div id="smooth-content">
+    <!-- 3D SCROLL ENGINE -->
+    <main id="viewport">
+        <div id="scene">
             
-            <section class="hero" id="hero">
-                <img src="xBTtJNl - Imgur.jpg" class="hero-image-center" alt="Centerpiece">
-                <div class="hero-text-wrap">
-                    <h1 class="hero-title">
-                        <span class="title-line"><span>THE</span></span>
-                        <span class="title-line"><span>UNIVERSE</span></span>
-                        <span class="title-line"><span style="color: var(--accent-gold); font-style: italic;">OF YOU</span></span>
-                    </h1>
+            <!-- ZERO POINT: HERO -->
+            <section class="artifact" id="art-0" style="transform: translateZ(0px);">
+                <div class="text-pod" style="text-align: center; width: 100%;">
+                    <h1 class="kinetic-title js-aberration" style="font-size: 12vw;">THE EPOCH</h1>
+                    <span class="data-stream" style="font-size: 14px;">OF US</span>
+                </div>
+                <!-- Floating Hero Image -->
+                <div class="image-pod" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) translateZ(-200px);">
+                    <div class="flashlight"></div>
+                    <img src="xBTtJNl - Imgur.jpg" alt="Centerpiece">
                 </div>
             </section>
 
-            <section class="gallery-space">
-                
-                <article class="gallery-item">
-                    <div class="image-wrapper js-liquid">
-                        <img src="AbmCfZ2 - Imgur.jpg" alt="Memory 1">
-                    </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.08">
-                        <span class="text-meta">PHASE 01: GRAVITY</span>
-                        <h2 class="text-title">The Pull</h2>
-                        <p class="text-body">I used to think that gravity was just a physical law of planets. Then you walked into the room. Suddenly, everything loud went quiet, and my entire axis shifted to align with yours.</p>
-                    </div>
-                </article>
-
-                <article class="gallery-item">
-                    <div class="image-wrapper js-liquid">
-                        <img src="GHKaV5z - Imgur.png" alt="Memory 2">
-                    </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.12">
-                        <span class="text-meta">PHASE 02: TIME DILATION</span>
-                        <h2 class="text-title">The Stillness</h2>
-                        <p class="text-body">With you, time behaves differently. Hours feel like seconds when we talk, yet a single second spent looking into your eyes holds the weight of an entire lifetime.</p>
-                    </div>
-                </article>
-
-                <article class="gallery-item">
-                    <div class="image-wrapper js-liquid">
-                        <img src="e8Ww4Dx - Imgur.png" alt="Memory 3">
-                    </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.16">
-                        <span class="text-meta">PHASE 03: EVENT HORIZON</span>
-                        <h2 class="text-title">No Return</h2>
-                        <p class="text-body">I do not want to go back to who I was before this. You are not just a chapter in my story. You are the ink, the paper, and the author of the best version of me.</p>
-                    </div>
-                </article>
-
-            </section>
-
-            <section class="poetry-void">
-                <div class="poetry-text" id="poetry-scroll">
-                    "If the universe is expanding infinitely, I am convinced it is only doing so to make enough room for the magnitude of what I feel for you. We are not just a passing moment. We are an epoch."
+            <!-- ARTIFACT 1 -->
+            <section class="artifact" id="art-1" style="transform: translateZ(-2000px);">
+                <div class="image-pod js-tilt">
+                    <div class="flashlight"></div>
+                    <img src="AbmCfZ2 - Imgur.jpg" alt="Memory">
+                </div>
+                <div class="text-pod">
+                    <span class="data-stream">PHASE 01 // GRAVITY</span>
+                    <h2 class="kinetic-title js-aberration">The Pull</h2>
+                    <p class="text-body">I used to think that gravity was just a physical law of planets. Then you walked into the room. Suddenly, everything loud went quiet, and my entire axis shifted to align with yours.</p>
                 </div>
             </section>
 
-            <section class="finale">
-                <button class="magnetic-btn" id="magnetic-btn">Claim Forever</button>
+            <!-- ARTIFACT 2 -->
+            <section class="artifact" id="art-2" style="transform: translateZ(-4000px);">
+                <div class="image-pod js-tilt">
+                    <div class="flashlight"></div>
+                    <img src="GHKaV5z - Imgur.png" alt="Memory">
+                </div>
+                <div class="text-pod">
+                    <span class="data-stream">PHASE 02 // TIME DILATION</span>
+                    <h2 class="kinetic-title js-aberration">The Stillness</h2>
+                    <p class="text-body">With you, time behaves differently. Hours feel like seconds when we talk, yet a single second spent looking into your eyes holds the weight of an entire lifetime.</p>
+                </div>
             </section>
 
-            <div style="height: 10vh;"></div>
+            <!-- ARTIFACT 3 -->
+            <section class="artifact" id="art-3" style="transform: translateZ(-6000px);">
+                <div class="image-pod js-tilt">
+                    <div class="flashlight"></div>
+                    <img src="e8Ww4Dx - Imgur.png" alt="Memory">
+                </div>
+                <div class="text-pod">
+                    <span class="data-stream">PHASE 03 // EVENT HORIZON</span>
+                    <h2 class="kinetic-title js-aberration">No Return</h2>
+                    <p class="text-body">I do not want to go back to who I was before this. You are not just a chapter in my story. You are the ink, the paper, and the author of the best version of me.</p>
+                    <button id="portal-btn">Initiate Forever</button>
+                </div>
+            </section>
+
         </div>
     </main>
 
+    <!-- THE FINAL KILL SHOT (END SCREEN) -->
+    <div id="end-screen">
+        <div class="glitch-flash" id="flash"></div>
+        <div class="end-script">You are my favorite place.</div>
+        <div class="end-serif">THE SEARCH IS OVER.</div>
+    </div>
+
     <script>
         /**
-         * 1. STABILIZED ASYNC PRELOADER
+         * WELCOME TO GOD-MODE V3.
+         * 3D Z-Axis Mathematics & Physics Engine.
          */
-        let loadPerc = 0;
-        const loaderPercText = document.getElementById('loader-perc');
-        const loaderFill = document.getElementById('loader-fill');
-        const loader = document.getElementById('loader');
 
-        window.onload = () => {
-            let loadInterval = setInterval(() => {
-                loadPerc += Math.random() * 8;
-                if(loadPerc >= 100) {
-                    loadPerc = 100;
-                    clearInterval(loadInterval);
-                    loaderPercText.innerText = '100.00%';
-                    loaderFill.style.width = '100%';
-                    
-                    setTimeout(() => {
-                        loader.style.transform = 'translateY(-100%)';
-                        document.getElementById('hero').classList.add('active');
-                        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
-                    }, 600);
-                } else {
-                    loaderPercText.innerText = loadPerc.toFixed(2) + '%';
-                    loaderFill.style.width = loadPerc + '%';
-                }
-            }, 40);
-        };
-
-        /**
-         * 2. LERP-DRIVEN MOMENTUM SCROLL ENGINE
-         */
-        const body = document.body;
-        const scrollWrapper = document.getElementById('smooth-content');
-        let currentY = 0, targetY = 0;
-        const ease = 0.08;
-
-        const resizeObserver = new ResizeObserver(entries => {
-            for (let entry of entries) {
-                body.style.height = `${entry.contentRect.height}px`;
-            }
-        });
-        resizeObserver.observe(scrollWrapper);
+        // 1. Core Variables
+        const scene = document.getElementById('scene');
+        const artifacts = document.querySelectorAll('.artifact');
+        const zCoordDisplay = document.getElementById('z-coord');
+        const progressBar = document.getElementById('progress');
         
-        window.addEventListener('scroll', () => { targetY = window.scrollY; });
+        let scrollY = 0, targetY = 0;
+        let velocity = 0, lastY = 0;
+        const ease = 0.08;
+        
+        // Maps scroll height to Z-depth (Adjust multiplier for speed of travel)
+        const zMultiplier = 2.5; 
 
-        /**
-         * 3. COORDINATE FLUID CURSOR & SVG FILTER RESCALE
-         */
+        // 2. Event Listeners
+        window.addEventListener('scroll', () => {
+            targetY = window.scrollY;
+            
+            // HUD Update
+            let scrollPerc = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            progressBar.style.width = `${scrollPerc}%`;
+        });
+
+        // 3. Mouse Tracking & Flashlight Math
+        const cursorScanner = document.getElementById('cursor-scanner');
         const cursorDot = document.getElementById('cursor-dot');
-        const cursorAura = document.getElementById('cursor-aura');
-        const displacementMap = document.getElementById('displacement');
         let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-        let auraX = mouseX, auraY = mouseY;
-        let liquidScale = 0, targetLiquidScale = 0;
+        let cx = mouseX, cy = mouseY;
 
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
             cursorDot.style.left = `${mouseX}px`;
             cursorDot.style.top = `${mouseY}px`;
-        });
 
-        document.querySelectorAll('.js-liquid').forEach(el => {
-            el.addEventListener('mouseenter', () => { 
-                targetLiquidScale = 45; 
-                cursorAura.style.width = '70px'; 
-                cursorAura.style.height = '70px';
-                cursorAura.style.borderColor = 'var(--accent-crimson)';
+            // Flashlight Dynamic Variables
+            document.querySelectorAll('.image-pod').forEach(pod => {
+                const rect = pod.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                pod.style.setProperty('--mouse-x', `${x}px`);
+                pod.style.setProperty('--mouse-y', `${y}px`);
             });
-            el.addEventListener('mouseleave', () => { 
-                targetLiquidScale = 0; 
-                cursorAura.style.width = '40px'; 
-                cursorAura.style.height = '40px';
-                cursorAura.style.borderColor = 'rgba(212, 175, 55, 0.5)';
-            });
-        });
-
-        /**
-         * 4. INTERACTIVE MAGNETIC BUTTON & CLOSING PORTAL
-         */
-        const magBtn = document.getElementById('magnetic-btn');
-        const portal = document.getElementById('beautiful-portal');
-
-        magBtn.addEventListener('mousemove', (e) => {
-            const rect = magBtn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            magBtn.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
             
-            cursorAura.style.width = '100px';
-            cursorAura.style.height = '100px';
-            cursorAura.style.background = 'var(--text-stardust)';
-            cursorAura.style.mixBlendMode = 'difference';
+            // 3D Tilt Math for Cards
+            document.querySelectorAll('.js-tilt').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const rotX = -(y / rect.height) * 20; 
+                const rotY = (x / rect.width) * 20;
+                el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(100px)`;
+            });
         });
 
-        magBtn.addEventListener('mouseleave', () => {
-            magBtn.style.transform = `translate(0px, 0px)`;
-            cursorAura.style.width = '40px';
-            cursorAura.style.height = '40px';
-            cursorAura.style.background = 'transparent';
-            cursorAura.style.mixBlendMode = 'normal';
+        document.querySelectorAll('.js-tilt').forEach(el => {
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(100px)`;
+            });
         });
 
-        magBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            portal.classList.add('active');
-            cursorAura.style.width = '0px';
-            cursorAura.style.height = '0px';
-        });
+        // 4. The Grand Render Loop
+        const kineticTitles = document.querySelectorAll('.js-aberration');
 
-        /**
-         * 5. HIGH-DENSITY CONSTELLATION BACKGROUND (CANVAS)
-         */
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        function render() {
+            // Lerp Scroll Math
+            scrollY += (targetY - scrollY) * ease;
+            const zDepth = scrollY * zMultiplier;
+            
+            // Update Scene Z-Position
+            scene.style.transform = `translateZ(${zDepth}px)`;
+            
+            // HUD Data
+            zCoordDisplay.innerText = zDepth.toFixed(0).padStart(4, '0');
 
-        let particles = [];
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-        for (let i = 0; i < 70; i++) particles.push(new Particle());
-
-        /**
-         * 6. SYSTEM MATHEMATICS RENDER LOOP (60FPS)
-         */
-        const poetryScroll = document.getElementById('poetry-scroll');
-
-        function renderLoop() {
-            if(!portal.classList.contains('active')) {
-                currentY += (targetY - currentY) * ease;
-                const roundedY = Math.round(currentY * 100) / 100;
-                scrollWrapper.style.transform = `translate3d(0, -${roundedY}px, 0)`;
-
-                document.querySelectorAll('.parallax-text').forEach(el => {
-                    let speed = el.getAttribute('data-speed');
-                    el.style.transform = `translateY(${roundedY * speed}px)`;
-                });
-
-                let poetryRect = poetryScroll.getBoundingClientRect();
-                let poetryOffset = window.innerHeight - poetryRect.top;
-                if(poetryOffset > 0) {
-                    let percent = (poetryOffset / window.innerHeight) * 100;
-                    poetryScroll.style.backgroundPosition = `${100 - percent}% 0`;
+            // Calculate Scroll Velocity for Chromatic Aberration
+            velocity = targetY - lastY;
+            lastY = targetY;
+            let aberration = Math.abs(velocity) * 0.15; // Intensity multiplier
+            if (aberration > 15) aberration = 15; // Cap it
+            
+            kineticTitles.forEach(title => {
+                if(aberration > 0.5) {
+                    title.style.textShadow = `-${aberration}px 0px 0 rgba(255,0,0,0.8), ${aberration}px 0px 0 rgba(0,255,255,0.8)`;
+                } else {
+                    title.style.textShadow = `0 0 0 transparent`;
                 }
-            }
+            });
 
-            liquidScale += (targetLiquidScale - liquidScale) * 0.1;
-            displacementMap.setAttribute('scale', liquidScale);
+            // Opacity Distance Math (Fade in/out based on Z proximity)
+            artifacts.forEach(art => {
+                // Get the hardcoded Z transform value of the artifact
+                const artZ = Math.abs(parseInt(art.style.transform.match(/-?\d+/)[0])) || 0;
+                
+                // Calculate distance between Camera (zDepth) and Artifact (artZ)
+                const distance = Math.abs(zDepth - artZ);
+                
+                // Fade logic: fully visible at distance 0, fades out entirely by distance 1200
+                let opacity = 1 - (distance / 1500);
+                if (opacity < 0) opacity = 0;
+                if (opacity > 1) opacity = 1;
+                
+                art.style.opacity = opacity;
+                
+                // Add blur depth-of-field effect based on distance
+                if(distance > 200) {
+                     art.style.filter = `blur(${distance / 200}px)`;
+                } else {
+                     art.style.filter = `blur(0px)`;
+                }
+            });
 
-            auraX += (mouseX - auraX) * 0.12;
-            auraY += (mouseY - auraY) * 0.12;
-            cursorAura.style.left = `${auraX}px`;
-            cursorAura.style.top = `${auraY}px`;
+            // Cursor scanner trailing physics
+            cx += (mouseX - cx) * 0.15;
+            cy += (mouseY - cy) * 0.15;
+            cursorScanner.style.left = `${cx}px`;
+            cursorScanner.style.top = `${cy}px`;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-
-            requestAnimationFrame(renderLoop);
+            requestAnimationFrame(render);
         }
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // 5. The Portal Trigger (The Final Kill)
+        const portalBtn = document.getElementById('portal-btn');
+        const endScreen = document.getElementById('end-screen');
+        const flash = document.getElementById('flash');
+
+        portalBtn.addEventListener('mouseenter', () => {
+            cursorScanner.style.width = '100px'; cursorScanner.style.height = '100px';
+            cursorScanner.style.borderColor = 'var(--crimson)';
+        });
+        portalBtn.addEventListener('mouseleave', () => {
+            cursorScanner.style.width = '60px'; cursorScanner.style.height = '60px';
+            cursorScanner.style.borderColor = 'var(--gold)';
         });
 
-        renderLoop();
+        portalBtn.addEventListener('click', () => {
+            // Glitch flash effect
+            flash.style.opacity = '1';
+            setTimeout(() => { flash.style.opacity = '0'; }, 150);
+            setTimeout(() => { flash.style.opacity = '1'; }, 200);
+            setTimeout(() => { flash.style.opacity = '0'; }, 300);
+            
+            // Show End Screen
+            setTimeout(() => {
+                endScreen.classList.add('unleashed');
+                cursorScanner.style.opacity = 0;
+                cursorDot.style.opacity = 0;
+            }, 400);
+        });
+
+        // Initialize Render
+        render();
+
     </script>
 </body>
 </html>
