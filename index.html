@@ -3,480 +3,515 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syncopate:wght@400;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
-    
+    <title>For You ❤️</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,400&family=Montserrat:wght@200;300;400&family=Alex+Brush&display=swap" rel="stylesheet">
+
     <style>
-        /* =========================================
-           CORE CONFIGURATION & FRAMING CONTROLS
-           ========================================= */
+        /* Modern Design Reset & Variable Systems */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
         :root {
-            --bg-void: #050505;
-            --text-stardust: #f0ebe1;
-            --accent-crimson: #8a1c25;
-            --accent-gold: #d4af37;
-            --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
-
-            /* TUNING CONTROLS: Change these percentages to align her face perfectly.
-               0% = Top of image, 50% = Dead Center, 100% = Bottom of image
-            */
-            --hero-focus: center 25%;
-            --card-1-focus: center 20%;
-            --card-2-focus: center 50%;
-            --card-3-focus: center 30%;
+            --bg-gradient: linear-gradient(135deg, #fbf5f5 0%, #f3e1e4 50%, #e8cbd0 100%);
+            --primary-love: #b33951;
+            --secondary-love: #e28f9e;
+            --dark-charcoal: #2c2224;
+            --glass-base: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --shadow-lux: 0 20px 40px rgba(179, 57, 81, 0.08);
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
-        
-        body, html {
-            width: 100%;
-            background-color: var(--bg-void);
-            color: var(--text-stardust);
-            font-family: 'Cormorant Garamond', serif;
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark-charcoal);
             overflow-x: hidden;
-            overscroll-behavior: none;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
         }
 
-        .svg-filters { position: absolute; width: 0; height: 0; pointer-events: none; }
-
-        /* =========================================
-           CINEMATIC LOADER
-           ========================================= */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: var(--bg-void); z-index: 10000;
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column; transition: transform 1.2s var(--ease-cinematic);
-        }
-        .loader-text {
-            font-family: 'Syncopate', sans-serif; font-size: 8vw; font-weight: 700;
-            color: transparent; -webkit-text-stroke: 1px var(--accent-gold);
-            position: relative; overflow: hidden;
-        }
-        .loader-fill {
-            position: absolute; top: 0; left: 0; height: 100%; width: 0%;
-            background: var(--accent-gold); mix-blend-mode: screen; transition: width 0.1s linear;
-        }
-        .loader-meta { font-family: 'Syncopate', sans-serif; font-size: 10px; letter-spacing: 8px; margin-top: 20px; color: var(--accent-gold); }
-
-        /* =========================================
-           CANVAS BACKGROUND
-           ========================================= */
-        #canvas-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
-
-        /* =========================================
-           MAGNETIC FLUID CURSOR
-           ========================================= */
-        .cursor-aura {
-            position: fixed; width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, background 0.3s;
-            display: flex; justify-content: center; align-items: center; font-family: 'Syncopate', sans-serif; font-size: 8px; color: transparent;
-        }
-        .cursor-dot {
-            position: fixed; width: 4px; height: 4px; background: var(--text-stardust);
-            border-radius: 50%; pointer-events: none; z-index: 10000;
-            transform: translate(-50%, -50%);
+        /* Ambient Floating Particles Background */
+        .heart-particle {
+            position: fixed;
+            color: var(--secondary-love);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp 12s linear infinite;
         }
 
-        /* =========================================
-           SMOOTH SCROLL WRAPPER
-           ========================================= */
-        #smooth-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; overflow: hidden; z-index: 1; }
-        #smooth-content { will-change: transform; width: 100%; }
-
-        /* =========================================
-           HERO SECTION
-           ========================================= */
-        .hero { height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
-        .hero-text-wrap { text-align: center; perspective: 1000px; z-index: 2; }
-        .hero-title {
-            font-family: 'Cinzel', serif; font-size: 10vw; line-height: 0.85;
-            text-transform: uppercase; mix-blend-mode: exclusion;
-        }
-        .title-line { display: block; overflow: hidden; }
-        .title-line span { display: inline-block; transform: translateY(100%); transition: transform 1.2s var(--ease-cinematic); }
-        .hero.active .title-line span { transform: translateY(0); }
-        
-        .hero-image-center {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8) rotate(-2deg);
-            width: 25vw; height: 35vw; object-fit: cover; z-index: 1; opacity: 0; transition: all 2s var(--ease-cinematic);
-            filter: grayscale(100%);
-            object-position: var(--hero-focus); /* Position Override */
-        }
-        .hero.active .hero-image-center { opacity: 0.35; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-
-        /* =========================================
-           SPATIAL GALLERY (LIQUID DISTORTION)
-           ========================================= */
-        .gallery-space { padding: 15vh 0; display: flex; flex-direction: column; gap: 25vh; }
-        .gallery-item {
-            display: flex; align-items: center; justify-content: space-between; padding: 0 10vw;
-            perspective: 1000px;
-        }
-        .gallery-item:nth-child(even) { flex-direction: row-reverse; }
-        
-        .image-wrapper {
-            width: 35vw; height: 50vh; position: relative;
-            filter: url(#liquid-distortion);
-            transition: transform 0.4s ease-out;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-        }
-        .image-wrapper img {
-            width: 100%; height: 100%; object-fit: cover;
-            filter: grayscale(80%) contrast(1.1); transition: filter 0.8s, transform 0.8s;
-        }
-        .image-wrapper:hover img { filter: grayscale(0%) contrast(1); transform: scale(1.02); }
-        
-        /* Individual framing overrides mapping to our root focus positions */
-        .gallery-item:nth-child(1) .image-wrapper img { object-position: var(--card-1-focus); }
-        .gallery-item:nth-child(2) .image-wrapper img { object-position: var(--card-2-focus); }
-        .gallery-item:nth-child(3) .image-wrapper img { object-position: var(--card-3-focus); }
-
-        .image-wrapper::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(138, 28, 37, 0.15); mix-blend-mode: overlay; pointer-events: none;
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
         }
 
-        .text-wrapper { width: 40vw; z-index: 2; }
-        .text-meta { font-family: 'Syncopate', sans-serif; font-size: 10px; letter-spacing: 4px; color: var(--accent-gold); display: block; margin-bottom: 20px; }
-        .text-title { font-family: 'Cinzel', serif; font-size: 3.5vw; line-height: 1.1; margin-bottom: 30px; text-transform: uppercase; }
-        .text-body { font-size: 1.3vw; line-height: 1.6; color: rgba(240, 235, 225, 0.8); }
-
-        /* =========================================
-           POETRY WALL
-           ========================================= */
-        .poetry-void { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0 10vw; }
-        .poetry-text {
-            font-size: 4.5vw; text-align: center; line-height: 1.2;
-            font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(255,255,255,0.1);
-            background: linear-gradient(to right, var(--text-stardust) 50%, rgba(255,255,255,0.1) 50%);
-            background-size: 200% 100%; background-position: 100% 0;
-            -webkit-background-clip: text; transition: background-position 0.1s linear;
+        /* LUXURY INTRO SECTION */
+        #intro-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 40px;
+            z-index: 2;
+            background: radial-gradient(circle, rgba(251,245,245,0.2) 0%, rgba(243,225,228,0.4) 100%);
         }
 
-        /* =========================================
-           FINALE BUTTON
-           ========================================= */
-        .finale { height: 80vh; display: flex; align-items: center; justify-content: center; }
-        .magnetic-btn {
-            position: relative; display: inline-block; padding: 30px 60px; border: 1px solid var(--accent-gold);
-            border-radius: 100px; text-transform: uppercase; font-family: 'Syncopate', sans-serif; letter-spacing: 3px;
-            color: var(--text-stardust); text-decoration: none; overflow: hidden; background: transparent;
-            transition: background 0.3s, color 0.3s; z-index: 10;
+        .intro-container {
+            max-width: 700px;
+            animation: fadeInDown 1.8s var(--transition-smooth);
         }
-        .magnetic-btn::before {
-            content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
-            background: var(--accent-gold); transition: top 0.4s var(--ease-cinematic); z-index: -1;
-        }
-        .magnetic-btn:hover::before { top: 0; }
-        .magnetic-btn:hover { color: var(--bg-void); font-weight: bold; }
 
-        /* =========================================
-           THE BEAUTIFUL REVEAL (PORTAL)
-           ========================================= */
-        #beautiful-portal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #0a0304; z-index: 1005; display: flex; justify-content: center;
-            align-items: center; flex-direction: column; opacity: 0; pointer-events: none;
-            transition: opacity 1.5s var(--ease-cinematic);
+        .intro-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--primary-love);
+            line-height: 1.2;
+            margin-bottom: 15px;
         }
-        #beautiful-portal.active { opacity: 1; pointer-events: auto; }
-        
-        .portal-bg-glow {
-            position: absolute; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(138,28,37,0.3) 0%, transparent 70%);
-            filter: blur(50px); animation: pulsingGlow 8s infinite alternate ease-in-out;
+
+        .intro-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--dark-charcoal);
+            opacity: 0.8;
+            margin-bottom: 40px;
         }
-        .portal-content { text-align: center; max-width: 70vw; z-index: 2; transform: translateY(40px); transition: transform 2s var(--ease-cinematic); }
-        #beautiful-portal.active .portal-content { transform: translateY(0); }
-        
-        .portal-cursive { font-family: 'WindSong', cursive; font-size: clamp(4rem, 8vw, 10rem); color: var(--accent-gold); margin-bottom: 20px; }
-        .portal-serif { font-family: 'Cinzel', serif; font-size: clamp(1.5rem, 3vw, 4rem); letter-spacing: 6px; text-transform: uppercase; line-height: 1.4; margin-bottom: 40px; }
-        .portal-body { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 2vw, 2.5rem); color: rgba(240, 235, 225, 0.7); max-width: 600px; margin: 0 auto; line-height: 1.5; }
 
-        @keyframes pulsingGlow { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 0.9; } }
+        .click-btn {
+            background: transparent;
+            color: var(--primary-love);
+            border: 1px solid var(--primary-love);
+            padding: 16px 45px;
+            font-size: 0.9rem;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            z-index: 1;
+        }
 
+        .click-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--primary-love);
+            transition: var(--transition-smooth);
+            z-index: -1;
+        }
+
+        .click-btn:hover {
+            color: #ffffff;
+            box-shadow: 0 15px 30px rgba(179, 57, 81, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .click-btn:hover::before {
+            width: 100%;
+        }
+
+        /* ENDLESS EDITORIAL SCRAPBOOK */
+        #scrapbook-section {
+            display: none;
+            max-width: 1000px;
+            margin: auto;
+            padding: 100px 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .scrapbook-header {
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--glass-base);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            margin-bottom: 120px;
+            box-shadow: var(--shadow-lux);
+            animation: fadeInUp 1.5s var(--transition-smooth);
+        }
+
+        .scrapbook-header h1 {
+            font-family: 'Alex Brush', cursive;
+            font-size: 5rem;
+            color: var(--primary-love);
+            margin-bottom: 25px;
+        }
+
+        .scrapbook-header p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-style: italic;
+            color: var(--dark-charcoal);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Infinite Asymmetric Layout Grid */
+        .scrapbook-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 140px; /* Expansive space between love notes */
+        }
+
+        /* Themed Rows alternating left/right layout */
+        .story-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+            width: 100%;
+        }
+
+        .story-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        @media (max-width: 768px) {
+            .story-row, .story-row:nth-child(even) {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        /* Editorial Image & Text Modules */
+        .card-visual {
+            flex: 1;
+            max-width: 440px;
+            position: relative;
+        }
+
+        .polaroid {
+            background: #ffffff;
+            padding: 18px 18px 50px 18px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.06);
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            filter: sepia(10%) contrast(95%);
+            transition: var(--transition-smooth);
+        }
+
+        .polaroid:hover img {
+            filter: sepia(0%) contrast(100%);
+        }
+
+        .card-text {
+            flex: 1;
+            padding: 40px;
+            background: var(--glass-base);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lux);
+            transition: var(--transition-smooth);
+        }
+
+        .card-text:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .card-text h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: var(--primary-love);
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(179, 57, 81, 0.15);
+            padding-bottom: 10px;
+        }
+
+        .card-text p {
+            font-size: 0.95rem;
+            color: #443739;
+            margin-bottom: 15px;
+        }
+
+        .card-text p.poetry-line {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--primary-love);
+            border-left: 2px solid var(--secondary-love);
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+
+        .heart-icon {
+            display: inline-block;
+            color: var(--primary-love);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        /* Grand Extended Infinite Prose Section */
+        .prose-interlude {
+            background: transparent;
+            text-align: center;
+            padding: 80px 20px;
+            margin: 60px auto;
+            max-width: 750px;
+        }
+
+        .prose-interlude h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-style: italic;
+            font-weight: 300;
+            color: var(--primary-love);
+            margin-bottom: 30px;
+        }
+
+        .prose-interlude p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--dark-charcoal);
+            margin-bottom: 25px;
+            letter-spacing: 0.8px;
+        }
+
+        /* LUXURY FOOTER */
+        .scrapbook-footer {
+            margin-top: 160px;
+            text-align: center;
+            padding: 80px 40px;
+            background: var(--glass-base);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lux);
+        }
+
+        .scrapbook-footer p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            max-width: 650px;
+            margin: 0 auto 30px auto;
+        }
+
+        .scrapbook-footer h3 {
+            font-family: 'Alex Brush', cursive;
+            font-size: 3.5rem;
+            color: var(--primary-love);
+            font-weight: 400;
+        }
+
+        /* Rotations for organic scrapbook alignment */
+        .rotate-left { transform: rotate(-1.5deg); }
+        .rotate-right { transform: rotate(2deg); }
+        .polaroid:hover { transform: scale(1.02) rotate(0deg); box-shadow: 0 40px 80px rgba(179,57,81,0.12); }
+
+        /* Animation Keyframes */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
     </style>
 </head>
+
 <body>
 
-    <svg class="svg-filters">
-        <filter id="liquid-distortion">
-            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
-            <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-    </svg>
+<div id="particle-container"></div>
 
-    <div id="loader">
-        <div class="loader-text">
-            <span style="position: relative; z-index: 2;">IGNITING</span>
-            <div class="loader-fill" id="loader-fill"></div>
+<section id="intro-section">
+    <div class="intro-container">
+        <h1 class="intro-title">Finally, you came…</h1>
+        <h2 class="intro-subtitle">I’ve written a universe for you.</h2>
+        <button class="click-btn" id="revealBtn">Enter My Heart</button>
+    </div>
+</section>
+
+<main id="scrapbook-section">
+
+    <header class="scrapbook-header">
+        <h1>To the one who owns my thoughts</h1>
+        <p>
+            If love had a shape, it would look like you. If peace had a voice, it would sound like you. 
+            And if my heart had a home… it would be forever found within you.
+        </p>
+    </header>
+
+    <div class="scrapbook-grid">
+
+        <div class="story-row">
+            <div class="card-visual">
+                <div class="polaroid rotate-left">
+                    <img src="xBTtJNl%20-%20Imgur.jpg" alt="Memory One">
+                </div>
+            </div>
+            <div class="card-text">
+                <h3>The Moment You Exist</h3>
+                <p>Every time I see you, the world feels softer. Like everything loud inside me finally calms down. You are not just beautiful — you are the definition of comfort in human form.</p>
+                <p class="poetry-line">"In a room full of art, my eyes would still only look for you."</p>
+                <p>I find myself tracing your smile in my memory when you're gone, realizing how effortlessly you have re-written the landscape of my life.</p>
+                <span class="heart-icon">♥</span>
+            </div>
         </div>
-        <div class="loader-meta" id="loader-perc">0.00%</div>
+
+        <div class="story-row">
+            <div class="card-visual">
+                <div class="polaroid rotate-right">
+                    <img src="AbmCfZ2%20-%20Imgur.jpg" alt="Memory Two">
+                </div>
+            </div>
+            <div class="card-text">
+                <h3>Your Silent Magic</h3>
+                <p>You don’t even realize it, but your presence changes everything. The way you exist is like poetry that doesn’t need words. I find myself memorizing your details without even trying.</p>
+                <p>The gentle inflection of your voice, the warmth that radiates when you walk into a room—it's a quiet sorcery that grounds me completely.</p>
+                <p class="poetry-line">"You are my favorite coincidence in a world full of noise."</p>
+                <span class="heart-icon">♥</span>
+            </div>
+        </div>
+
+        <div class="prose-interlude">
+            <h2>The Symphony of Us</h2>
+            <p>Sometimes, I stop and think about how vast the universe is. Billions of years, countless constellations, and an infinite stretch of time. Yet, somehow, my timeline aligned perfectly with yours. I got to exist at the exact same time as you, walk the same earth, and share the same air.</p>
+            <p>That is not luck. That is a quiet miracle. Loving you feels less like an choice and more like a profound remembering—as if my heart knew yours long before we ever met.</p>
+            <span class="heart-icon" style="font-size:2rem;">♡</span>
+        </div>
+
+        <div class="story-row">
+            <div class="card-visual">
+                <div class="polaroid rotate-left">
+                    <img src="GHKaV5z%20-%20Imgur.png" alt="Memory Three">
+                </div>
+            </div>
+            <div class="card-text">
+                <h3>My Favorite Thought</h3>
+                <p>Even on my worst days, thinking about you feels like light breaking through dark clouds. You became my calm without even asking to. And somehow… I never want to go back to who I was before you.</p>
+                <p class="poetry-line">"You are the peace I look for in a chaotic world."</p>
+                <p>You didn't fix me, because I wasn't broken. Instead, you illuminated the corners of my soul that I forgot how to love, showing me how beautiful life could be when shared.</p>
+                <span class="heart-icon">♥</span>
+            </div>
+        </div>
+
+        <div class="story-row">
+            <div class="card-visual">
+                <div class="polaroid rotate-right">
+                    <img src="e8Ww4Dx%20-%20Imgur.png" alt="Memory Four">
+                </div>
+            </div>
+            <div class="card-text">
+                <h3>If Forever Exists</h3>
+                <p>I don’t know what the future holds, but I know that if forever had a direction, it would always find its way back to you and me. Through every turning season, your name is the one written in my heart.</p>
+                <p>Time has a way of moving too fast when I am with you, and too slow when we are apart. I want to build worlds with you.</p>
+                <p class="poetry-line">"With you, forever doesn't feel long enough."</p>
+                <span class="heart-icon">♥</span>
+            </div>
+        </div>
+
+        <div class="prose-interlude">
+            <h2>The Architecture of My Heart</h2>
+            <p>If I could give you one thing in life, I would give you the ability to see yourself through my eyes. Only then would you realize how completely irreplaceable you are. You look at your flaws; I look at them as the strokes of a masterpiece.</p>
+            <p>I love the way you think, the way you feel things so deeply, and the effortless grace you carry even when life gets heavy. You are a sanctuary. Every word written here is just a tiny fragment of a feeling that stretches beyond the margins of this screen.</p>
+        </div>
+
+        <div class="story-row">
+            <div class="card-text" style="max-width: 100%; flex: none;">
+                <h3>A Promise Stamped in Time</h3>
+                <p>I love you not only for who you are, but for who I am when I am with you. You make me want to reach higher, love deeper, and live more intentionally. This love isn't just a collection of sweet words; it is an anchor. It is a decision I make happily every single morning when I wake up, and every single evening before I close my eyes.</p>
+                <p class="poetry-line">"You are my today, my tomorrow, and all of my remaining passings of time."</p>
+                <p>No matter where the wind takes us, or what stories life decides to write for us, please always remember this: you are valued, you are fiercely protected, and you are loved beyond measure.</p>
+                <span class="heart-icon">♥</span>
+            </div>
+        </div>
+
     </div>
 
-    <canvas id="canvas-bg"></canvas>
+    <footer class="scrapbook-footer">
+        <p>
+            I don’t promise absolute perfection. I don’t promise easy days without storm. 
+            But I promise absolute presence — always staying, always fighting, always choosing you in every single version of life.
+        </p>
+        <h3>
+            you are my favorite place in this world<br>
+            <span style="font-family:'Montserrat'; font-size:0.9rem; text-transform:uppercase; letter-spacing:3px; display:block; margin-top:15px; opacity:0.7;">— orxnge</span>
+        </h3>
+    </footer>
 
-    <div class="cursor-aura" id="cursor-aura"></div>
-    <div class="cursor-dot" id="cursor-dot"></div>
+</main>
 
-    <div id="beautiful-portal">
-        <div class="portal-bg-glow"></div>
-        <div class="portal-content">
-            <div class="portal-cursive">Forever Confirmed</div>
-            <h2 class="portal-serif">Kanbghik a Douae</h2>
-            <p class="portal-body">"In every layout, every line of script, and every corner of this infinite canvas... it always structuralizes back to you."</p>
-        </div>
-    </div>
+<script>
+// Smooth reveal trigger
+document.getElementById('revealBtn').addEventListener('click', function() {
+    document.getElementById('intro-section').style.display = 'none';
+    document.getElementById('scrapbook-section').style.display = 'block';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+});
 
-    <main id="smooth-wrapper">
-        <div id="smooth-content">
+// Premium Visuals: Generate floating background hearts gracefully
+function createHeartParticles() {
+    const container = document.getElementById('particle-container');
+    const heartSymbols = ['♥', '♡', '❤', '💕'];
+    
+    // Generate a heart every 800ms for continuous life
+    setInterval(() => {
+        if(document.getElementById('scrapbook-section').style.display === 'block' || window.scrollY < window.innerHeight) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
             
-            <section class="hero" id="hero">
-                <img src="xBTtJNl - Imgur.jpg" class="hero-image-center" alt="Centerpiece">
-                <div class="hero-text-wrap">
-                    <h1 class="hero-title">
-                        <span class="title-line"><span>THE</span></span>
-                        <span class="title-line"><span>UNIVERSE</span></span>
-                        <span class="title-line"><span style="color: var(--accent-gold); font-style: italic;">OF YOU</span></span>
-                    </h1>
-                </div>
-            </section>
-
-            <section class="gallery-space">
-                
-                <article class="gallery-item">
-                    <div class="image-wrapper js-liquid">
-                        <img src="AbmCfZ2 - Imgur.jpg" alt="Memory 1">
-                    </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.08">
-                        <span class="text-meta">PHASE 01: GRAVITY</span>
-                        <h2 class="text-title">The Pull</h2>
-                        <p class="text-body">I used to think that gravity was just a physical law of planets. Then you walked into the room. Suddenly, everything loud went quiet, and my entire axis shifted to align with yours.</p>
-                    </div>
-                </article>
-
-                <article class="gallery-item">
-                    <div class="image-wrapper js-liquid">
-                        <img src="GHKaV5z - Imgur.png" alt="Memory 2">
-                    </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.12">
-                        <span class="text-meta">PHASE 02: TIME DILATION</span>
-                        <h2 class="text-title">The Stillness</h2>
-                        <p class="text-body">With you, time behaves differently. Hours feel like seconds when we talk, yet a single second spent looking into your eyes holds the weight of an entire lifetime.</p>
-                    </div>
-                </article>
-
-                <article class="gallery-item">
-                    <div class="image-wrapper js-liquid">
-                        <img src="e8Ww4Dx - Imgur.png" alt="Memory 3">
-                    </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.16">
-                        <span class="text-meta">PHASE 03: EVENT HORIZON</span>
-                        <h2 class="text-title">No Return</h2>
-                        <p class="text-body">I do not want to go back to who I was before this. You are not just a chapter in my story. You are the ink, the paper, and the author of the best version of me.</p>
-                    </div>
-                </article>
-
-            </section>
-
-            <section class="poetry-void">
-                <div class="poetry-text" id="poetry-scroll">
-                    "If the universe is expanding infinitely, I am convinced it is only doing so to make enough room for the magnitude of what I feel for you. We are not just a passing moment. We are an epoch."
-                </div>
-            </section>
-
-            <section class="finale">
-                <button class="magnetic-btn" id="magnetic-btn">Claim Forever</button>
-            </section>
-
-            <div style="height: 10vh;"></div>
-        </div>
-    </main>
-
-    <script>
-        /**
-         * 1. STABILIZED ASYNC PRELOADER
-         */
-        let loadPerc = 0;
-        const loaderPercText = document.getElementById('loader-perc');
-        const loaderFill = document.getElementById('loader-fill');
-        const loader = document.getElementById('loader');
-
-        window.onload = () => {
-            let loadInterval = setInterval(() => {
-                loadPerc += Math.random() * 8;
-                if(loadPerc >= 100) {
-                    loadPerc = 100;
-                    clearInterval(loadInterval);
-                    loaderPercText.innerText = '100.00%';
-                    loaderFill.style.width = '100%';
-                    
-                    setTimeout(() => {
-                        loader.style.transform = 'translateY(-100%)';
-                        document.getElementById('hero').classList.add('active');
-                        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
-                    }, 600);
-                } else {
-                    loaderPercText.innerText = loadPerc.toFixed(2) + '%';
-                    loaderFill.style.width = loadPerc + '%';
-                }
-            }, 40);
-        };
-
-        /**
-         * 2. LERP-DRIVEN MOMENTUM SCROLL ENGINE
-         */
-        const body = document.body;
-        const scrollWrapper = document.getElementById('smooth-content');
-        let currentY = 0, targetY = 0;
-        const ease = 0.08;
-
-        const resizeObserver = new ResizeObserver(entries => {
-            for (let entry of entries) {
-                body.style.height = `${entry.contentRect.height}px`;
-            }
-        });
-        resizeObserver.observe(scrollWrapper);
-        
-        window.addEventListener('scroll', () => { targetY = window.scrollY; });
-
-        /**
-         * 3. COORDINATE FLUID CURSOR & SVG FILTER RESCALE
-         */
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorAura = document.getElementById('cursor-aura');
-        const displacementMap = document.getElementById('displacement');
-        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-        let auraX = mouseX, auraY = mouseY;
-        let liquidScale = 0, targetLiquidScale = 0;
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            cursorDot.style.left = `${mouseX}px`;
-            cursorDot.style.top = `${mouseY}px`;
-        });
-
-        document.querySelectorAll('.js-liquid').forEach(el => {
-            el.addEventListener('mouseenter', () => { 
-                targetLiquidScale = 45; 
-                cursorAura.style.width = '70px'; 
-                cursorAura.style.height = '70px';
-                cursorAura.style.borderColor = 'var(--accent-crimson)';
-            });
-            el.addEventListener('mouseleave', () => { 
-                targetLiquidScale = 0; 
-                cursorAura.style.width = '40px'; 
-                cursorAura.style.height = '40px';
-                cursorAura.style.borderColor = 'rgba(212, 175, 55, 0.5)';
-            });
-        });
-
-        /**
-         * 4. INTERACTIVE MAGNETIC BUTTON & CLOSING PORTAL
-         */
-        const magBtn = document.getElementById('magnetic-btn');
-        const portal = document.getElementById('beautiful-portal');
-
-        magBtn.addEventListener('mousemove', (e) => {
-            const rect = magBtn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            magBtn.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
+            // Random dynamic sizing and positioning
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * (24 - 12) + 12 + 'px';
+            heart.style.animationDuration = Math.random() * (16 - 8) + 8 + 's';
             
-            cursorAura.style.width = '100px';
-            cursorAura.style.height = '100px';
-            cursorAura.style.background = 'var(--text-stardust)';
-            cursorAura.style.mixBlendMode = 'difference';
-        });
-
-        magBtn.addEventListener('mouseleave', () => {
-            magBtn.style.transform = `translate(0px, 0px)`;
-            cursorAura.style.width = '40px';
-            cursorAura.style.height = '40px';
-            cursorAura.style.background = 'transparent';
-            cursorAura.style.mixBlendMode = 'normal';
-        });
-
-        magBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            portal.classList.add('active');
-            cursorAura.style.width = '0px';
-            cursorAura.style.height = '0px';
-        });
-
-        /**
-         * 5. HIGH-DENSITY CONSTELLATION BACKGROUND (CANVAS)
-         */
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-
-        let particles = [];
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
+            container.appendChild(heart);
+            
+            // Cleanup to maintain ultra-fast performance
+            setTimeout(() => {
+                heart.remove();
+            }, 16000);
         }
-        for (let i = 0; i < 70; i++) particles.push(new Particle());
+    }, 700);
+}
 
-        /**
-         * 6. SYSTEM MATHEMATICS RENDER LOOP (60FPS)
-         */
-        const poetryScroll = document.getElementById('poetry-scroll');
+createHeartParticles();
+</script>
 
-        function renderLoop() {
-            if(!portal.classList.contains('active')) {
-                currentY += (targetY - currentY) * ease;
-                const roundedY = Math.round(currentY * 100) / 100;
-                scrollWrapper.style.transform = `translate3d(0, -${roundedY}px, 0)`;
-
-                document.querySelectorAll('.parallax-text').forEach(el => {
-                    let speed = el.getAttribute('data-speed');
-                    el.style.transform = `translateY(${roundedY * speed}px)`;
-                });
-
-                let poetryRect = poetryScroll.getBoundingClientRect();
-                let poetryOffset = window.innerHeight - poetryRect.top;
-                if(poetryOffset > 0) {
-                    let percent = (poetryOffset / window.innerHeight) * 100;
-                    poetryScroll.style.backgroundPosition = `${100 - percent}% 0`;
-                }
-            }
-
-            liquidScale += (targetLiquidScale - liquidScale) * 0.1;
-            displacementMap.setAttribute('scale', liquidScale);
-
-            auraX += (mouseX - auraX) * 0.12;
-            auraY += (mouseY - auraY) * 0.12;
-            cursorAura.style.left = `${auraX}px`;
-            cursorAura.style.top = `${auraY}px`;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-
-            requestAnimationFrame(renderLoop);
-        }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        renderLoop();
-    </script>
 </body>
 </html>
