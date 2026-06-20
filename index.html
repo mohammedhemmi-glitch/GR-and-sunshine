@@ -3,88 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Singularity | GPU-Optimized</title>
+    <title>The Epoch of Us | Luxury Editorial</title>
+    
+    <!-- Premium Font Stack -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Force GPU Acceleration */
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-        body { 
-            background: #030303; color: #f5f2eb; 
-            height: 600vw; overflow-x: hidden;
-            /* Prevent repaint lag */
+        /* =========================================
+           CORE STYLES & VARIABLES
+           ========================================= */
+        :root {
+            --bg-dark: #050505;
+            --text-light: #f4eee0;
+            --accent-gold: #c6a87c;
+            --accent-red: #8a1c25;
+            
+            /* Framing overrides from your previous fix */
+            --hero-focus: center 25%;
+            --card-1-focus: center 20%;
+            --card-2-focus: center 50%;
+            --card-3-focus: center 30%;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
+        
+        body, html {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Cormorant Garamond', serif;
+            overscroll-behavior: none; /* Stops bounce on Mac */
+        }
+
+        /* =========================================
+           CUSTOM CURSOR
+           ========================================= */
+        #cursor {
+            position: fixed; width: 12px; height: 12px; background: var(--accent-gold);
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: transform 0.2s ease-out;
+            mix-blend-mode: difference;
+        }
+        #cursor-ring {
+            position: fixed; width: 40px; height: 40px; border: 1px solid rgba(198, 168, 124, 0.4);
+            border-radius: 50%; pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s;
+        }
+
+        /* =========================================
+           TYPOGRAPHY
+           ========================================= */
+        h1, h2 { font-family: 'Cinzel', serif; text-transform: uppercase; font-weight: 400; }
+        .meta-text { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 4px; color: var(--accent-gold); text-transform: uppercase; }
+        .body-text { font-size: 1.5vw; line-height: 1.6; color: rgba(244, 238, 224, 0.8); margin-top: 20px; }
+
+        /* =========================================
+           HERO SECTION (VERTICAL)
+           ========================================= */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
+        }
+        .hero-title { font-size: 10vw; line-height: 0.9; text-align: center; z-index: 2; mix-blend-mode: exclusion; }
+        .hero-img-wrapper {
+            position: absolute; width: 30vw; height: 45vw; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); z-index: 1; overflow: hidden; opacity: 0.4;
+        }
+        .hero-img-wrapper img {
+            width: 100%; height: 100%; object-fit: cover; object-position: var(--hero-focus);
+            filter: grayscale(100%); transition: filter 1s ease;
+        }
+        .hero:hover .hero-img-wrapper img { filter: grayscale(0%); }
+        .scroll-indicator { position: absolute; bottom: 40px; text-align: center; animation: pulse 2s infinite; }
+
+        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: translateY(0); } 50% { opacity: 1; transform: translateY(10px); } }
+
+        /* =========================================
+           HORIZONTAL SCROLL ENGINE
+           ========================================= */
+        .horizontal-track {
+            height: 400vh; /* Determines how long the user scrolls vertically to move horizontally */
+            position: relative;
+        }
+        .sticky-view {
+            position: sticky; top: 0; height: 100vh; width: 100vw;
+            overflow: hidden; display: flex; align-items: center;
+        }
+        .filmstrip {
+            display: flex; height: 100%; will-change: transform;
+            /* width will be set dynamically by JS */
+        }
+
+        /* =========================================
+           INDIVIDUAL PANELS
+           ========================================= */
+        .panel {
+            width: 100vw; height: 100vh; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        
+        /* The Image Canvas */
+        .canvas {
+            width: 45vw; height: 65vh; position: relative; overflow: hidden;
+            background: #111; display: flex; align-items: center; justify-content: center;
+        }
+        .canvas img {
+            width: 100%; height: 120%; /* Extra height for smooth parallax */
+            object-fit: cover; filter: grayscale(80%); transition: filter 0.5s ease;
             will-change: transform;
         }
+        .canvas:hover img { filter: grayscale(0%); }
 
-        #viewport {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            perspective: 1000px; overflow: hidden;
+        /* Apply custom positioning */
+        #img-1 { object-position: var(--card-1-focus); }
+        #img-2 { object-position: var(--card-2-focus); }
+        #img-3 { object-position: var(--card-3-focus); }
+
+        /* The Text Block (Floats beside the image) */
+        .text-block {
+            position: absolute; left: 65%; top: 50%; transform: translateY(-50%);
+            width: 25vw; z-index: 10; background: var(--bg-dark); padding: 40px;
+            border-left: 1px solid rgba(198, 168, 124, 0.3);
         }
-        #scene {
-            width: 100%; height: 100%; position: absolute;
-            transform-style: preserve-3d;
-            /* Hardware acceleration trigger */
-            will-change: transform;
+        .text-block h2 { font-size: 4vw; margin: 15px 0; }
+
+        /* Alternating Layout for Panel 2 */
+        .panel:nth-child(even) .text-block { left: auto; right: 65%; border-left: none; border-right: 1px solid rgba(198, 168, 124, 0.3); }
+
+        /* =========================================
+           THE FINALE (VERTICAL RE-ENTRY)
+           ========================================= */
+        .finale {
+            height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: var(--bg-dark); position: relative; z-index: 10;
         }
-
-        .artifact {
-            position: absolute; top: 50%; left: 50%; 
-            width: 80vw; height: 60vh;
-            display: flex; align-items: center; justify-content: space-between;
-            /* GPU Optimization */
-            transform-style: preserve-3d;
-            backface-visibility: hidden;
-            will-change: opacity, transform;
+        .btn-claim {
+            padding: 20px 50px; border: 1px solid var(--accent-gold); background: transparent;
+            color: var(--accent-gold); font-family: 'Space Mono', monospace; font-size: 14px;
+            letter-spacing: 3px; text-transform: uppercase; overflow: hidden; position: relative;
+            transition: color 0.4s;
         }
-
-        .image-pod {
-            width: 35vw; height: 50vh; position: relative;
-            background: #111;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
-            /* GPU Acceleration */
-            will-change: transform;
+        .btn-claim::before {
+            content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
+            background: var(--accent-gold); transition: top 0.4s cubic-bezier(0.76, 0, 0.24, 1); z-index: -1;
         }
+        .btn-claim:hover { color: var(--bg-dark); font-weight: bold; }
+        .btn-claim:hover::before { top: 0; }
+        
+        .finale-text { font-size: 3vw; font-style: italic; color: rgba(255,255,255,0.4); margin-bottom: 50px; text-align: center; max-width: 60%; line-height: 1.4; }
 
-        img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* The smoothest transition logic */
-        .artifact { opacity: 0; transition: opacity 0.3s linear; }
     </style>
 </head>
 <body>
 
-    <div id="viewport">
-        <div id="scene">
-            <section class="artifact" id="art-1" style="transform: translateZ(-2000px);">
-                <div class="image-pod"><img src="AbmCfZ2 - Imgur.jpg"></div>
-                <div style="width: 40vw;"><h1>The Pull</h1></div>
-            </section>
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- 01: HERO SECTION -->
+    <section class="hero">
+        <div class="hero-img-wrapper js-parallax-hero">
+            <img src="xBTtJNl - Imgur.jpg" alt="Centerpiece">
         </div>
-    </div>
+        <h1 class="hero-title">The Universe<br><span style="color: var(--accent-gold); font-style: italic;">Of You</span></h1>
+        <div class="scroll-indicator meta-text">Scroll to Begin</div>
+    </section>
 
+    <!-- 02: HORIZONTAL FILMSTRIP SECTION -->
+    <section class="horizontal-track">
+        <div class="sticky-view">
+            <div class="filmstrip" id="filmstrip">
+                
+                <!-- PANEL 1 -->
+                <div class="panel">
+                    <div class="canvas js-hover">
+                        <img src="AbmCfZ2 - Imgur.jpg" id="img-1" class="js-parallax-img" alt="Memory 1">
+                    </div>
+                    <div class="text-block">
+                        <div class="meta-text">01 — Gravity</div>
+                        <h2>The Pull</h2>
+                        <p class="body-text">I used to think that gravity was just a physical law of planets. Then you walked into the room. Suddenly, everything loud went quiet, and my entire axis shifted to align with yours.</p>
+                    </div>
+                </div>
+
+                <!-- PANEL 2 -->
+                <div class="panel">
+                    <div class="canvas js-hover">
+                        <img src="GHKaV5z - Imgur.png" id="img-2" class="js-parallax-img" alt="Memory 2">
+                    </div>
+                    <div class="text-block">
+                        <div class="meta-text">02 — Dilation</div>
+                        <h2>The Stillness</h2>
+                        <p class="body-text">With you, time behaves differently. Hours feel like seconds when we talk, yet a single second spent looking into your eyes holds the weight of an entire lifetime.</p>
+                    </div>
+                </div>
+
+                <!-- PANEL 3 -->
+                <div class="panel">
+                    <div class="canvas js-hover">
+                        <img src="e8Ww4Dx - Imgur.png" id="img-3" class="js-parallax-img" alt="Memory 3">
+                    </div>
+                    <div class="text-block">
+                        <div class="meta-text">03 — Horizon</div>
+                        <h2>No Return</h2>
+                        <p class="body-text">I do not want to go back to who I was before this. You are not just a chapter in my story. You are the ink, the paper, and the author of the best version of me.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 03: THE FINALE -->
+    <section class="finale">
+        <div class="finale-text">"If the universe is expanding infinitely, I am convinced it is only doing so to make enough room for the magnitude of what I feel for you."</div>
+        <button class="btn-claim js-hover" onclick="alert('The search is over. Forever confirmed.')">Claim Forever</button>
+    </section>
+
+    <!-- HIGH-PERFORMANCE SCRIPTS -->
     <script>
-        const scene = document.getElementById('scene');
-        let currentZ = 0;
-        let targetZ = 0;
+        /**
+         * PURE VANILLA LERP SCROLL & CURSOR ENGINE
+         * No libraries. No lag. Maximum luxury.
+         */
 
-        // Use high-performance scroll interpolation
-        window.addEventListener('wheel', (e) => {
-            targetZ += e.deltaY * 2;
-        }, { passive: true });
+        // 1. CURSOR LOGIC
+        const cursor = document.getElementById('cursor');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let ringX = mouseX, ringY = mouseY;
 
-        function animate() {
-            // Lerp (Linear Interpolation) for buttery smoothness
-            currentZ += (targetZ - currentZ) * 0.05;
-            scene.style.transform = `translateZ(${currentZ}px)`;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursor.style.left = `${mouseX}px`;
+            cursor.style.top = `${mouseY}px`;
+        });
+
+        document.querySelectorAll('.js-hover').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorRing.style.width = '80px'; cursorRing.style.height = '80px';
+                cursorRing.style.borderColor = 'var(--text-light)';
+                cursor.style.transform = 'translate(-50%, -50%) scale(0)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorRing.style.width = '40px'; cursorRing.style.height = '40px';
+                cursorRing.style.borderColor = 'rgba(198, 168, 124, 0.4)';
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+        });
+
+        // 2. HORIZONTAL SCROLL & PARALLAX MATH
+        const track = document.querySelector('.horizontal-track');
+        const filmstrip = document.getElementById('filmstrip');
+        const panels = document.querySelectorAll('.panel');
+        const images = document.querySelectorAll('.js-parallax-img');
+        const heroImg = document.querySelector('.js-parallax-hero');
+
+        // Set the width of the filmstrip dynamically based on number of panels
+        filmstrip.style.width = `${panels.length * 100}vw`;
+
+        let scrollY = window.scrollY;
+        let targetScrollY = scrollY;
+        let currentX = 0;
+        let targetX = 0;
+        const ease = 0.07; // Butter-smooth lerp friction
+
+        window.addEventListener('scroll', () => { targetScrollY = window.scrollY; });
+
+        function render() {
+            // Ring Trailing Physics
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = `${ringX}px`;
+            cursorRing.style.top = `${ringY}px`;
+
+            // Smooth Scroll Math
+            scrollY += (targetScrollY - scrollY) * ease;
+
+            // Hero Parallax (Moves image down slightly as you scroll past)
+            if (scrollY < window.innerHeight) {
+                heroImg.style.transform = `translate(-50%, calc(-50% + ${scrollY * 0.3}px))`;
+            }
+
+            // Horizontal Scroll Math
+            const trackTop = track.offsetTop;
+            const trackHeight = track.offsetHeight - window.innerHeight; // Scrollable distance
             
-            // Performant opacity management
-            document.querySelectorAll('.artifact').forEach(art => {
-                const z = parseFloat(art.style.transform.match(/-?\d+/)[0]);
-                const dist = Math.abs(currentZ - z);
-                art.style.opacity = dist < 1500 ? 1 : 0;
+            // Calculate how far we've scrolled inside the track (0 to 1)
+            let scrollProgress = (scrollY - trackTop) / trackHeight;
+            
+            // Clamp progress between 0 and 1
+            if (scrollProgress < 0) scrollProgress = 0;
+            if (scrollProgress > 1) scrollProgress = 1;
+
+            // Calculate target X translation for the filmstrip
+            const maxScrollX = filmstrip.offsetWidth - window.innerWidth;
+            targetX = -(scrollProgress * maxScrollX);
+            
+            // Apply Lerp to Horizontal Movement
+            currentX += (targetX - currentX) * ease;
+            filmstrip.style.transform = `translate3d(${currentX}px, 0, 0)`;
+
+            // Image Parallax (Moving images slightly in the opposite direction inside their mask)
+            images.forEach(img => {
+                // Creates a subtle slide effect as the panel moves
+                const parallaxOffset = (currentX * -0.15) % 100; 
+                img.style.transform = `translate3d(${parallaxOffset}px, 0, 0)`;
             });
 
-            requestAnimationFrame(animate);
+            requestAnimationFrame(render);
         }
-        animate();
+
+        render();
     </script>
 </body>
 </html>
