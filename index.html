@@ -3,685 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Study of You | Exhibition of Love</title>
-
-    <!-- High-End Editorial Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,700&family=Inter:wght@200;300;400&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
-
+    <title>The Epoch of Us | Final Masterpiece</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         /* =========================================
-           CORE VARIABLES & RESET
+           CORE RESET & VARIABLES
            ========================================= */
         :root {
-            --bg-dark: #070505;
-            --bg-accent: #170a0c;
-            --text-main: #f4ece6;
-            --text-muted: #a39b98;
-            --accent-red: #8b1e28;
-            --accent-glow: rgba(139, 30, 40, 0.4);
-            --ease-cinematic: cubic-bezier(0.19, 1, 0.22, 1);
+            --bg-void: #050505;
+            --text-stardust: #f0ebe1;
+            --accent-crimson: #8a1c25;
+            --accent-gold: #d4af37;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none; /* Custom Cursor Enabled */
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        ::selection {
-            background: var(--accent-red);
-            color: #fff;
-        }
-
-        /* =========================================
-           CUSTOM CURSOR
-           ========================================= */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--text-main);
-            border-radius: 50%;
-            position: fixed;
-            top: 0; left: 0;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background-color 0.3s;
-        }
-
-        .cursor-ring {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--text-muted);
-            border-radius: 50%;
-            position: fixed;
-            top: 0; left: 0;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s var(--ease-cinematic), width 0.3s, height 0.3s;
-        }
-
-        /* =========================================
-           AMBIENT BACKGROUND MESH
-           ========================================= */
-        .ambient-mesh {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, var(--bg-accent) 0%, var(--bg-dark) 100%);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
         
-        .glow-orb {
-            position: absolute;
-            width: 60vw; height: 60vw;
-            background: var(--accent-glow);
-            filter: blur(120px);
-            border-radius: 50%;
-            animation: orbFloat 20s infinite alternate linear;
-            opacity: 0.5;
-        }
-
-        .glow-orb:nth-child(2) {
-            background: rgba(40, 10, 15, 0.5);
-            width: 40vw; height: 40vw;
-            right: -10vw; bottom: -10vw;
-            animation-duration: 25s;
-            animation-direction: alternate-reverse;
-        }
-
-        @keyframes orbFloat {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(10vw, -10vh) scale(1.2); }
-        }
-
-        /* =========================================
-           CINEMATIC HERO
-           ========================================= */
-        #hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .hero-meta {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.4em;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            animation: fadeUp 2s 0.5s forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(4rem, 12vw, 12rem);
-            font-style: italic;
-            font-weight: 400;
-            line-height: 0.9;
-            text-align: center;
-            color: transparent;
-            -webkit-text-stroke: 1px var(--text-main);
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-title span {
-            display: block;
-            color: var(--text-main);
-            -webkit-text-stroke: 0;
-            transform: translateX(5vw);
-            font-family: 'WindSong', cursive;
-            font-size: clamp(5rem, 15vw, 14rem);
-            margin-top: -4vw;
-            color: var(--accent-red);
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            opacity: 0.5;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, var(--text-main), transparent);
-            animation: scrollLine 2s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
-        }
-
-        @keyframes scrollLine {
-            0% { transform: scaleY(0); transform-origin: top; }
-            50% { transform: scaleY(1); transform-origin: top; }
-            50.1% { transform: scaleY(1); transform-origin: bottom; }
-            100% { transform: scaleY(0); transform-origin: bottom; }
-        }
-
-        /* =========================================
-           KINETIC MARQUEE
-           ========================================= */
-        .marquee-container {
-            width: 100vw;
-            overflow: hidden;
-            padding: 10vh 0;
-            background: var(--bg-dark);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            z-index: 5;
-        }
-
-        .marquee-track {
-            display: flex;
-            white-space: nowrap;
-            animation: marquee 30s linear infinite;
-        }
-
-        .marquee-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 6vw;
-            font-style: italic;
-            color: var(--text-muted);
-            padding-right: 50px;
-        }
-
-        .marquee-text span {
-            color: var(--accent-red);
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-weight: 200;
-            text-transform: uppercase;
-            font-size: 2vw;
-            vertical-align: middle;
-            margin: 0 30px;
-        }
-
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* =========================================
-           EDITORIAL EXHIBITION (THE SCRAPBOOK)
-           ========================================= */
-        .exhibition {
-            padding: 15vh 5vw;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .exhibit-block {
-            display: grid;
-            grid-template-columns: 5fr 7fr;
-            gap: 8vw;
-            align-items: center;
-            margin-bottom: 25vh;
-        }
-
-        .exhibit-block:nth-child(even) {
-            grid-template-columns: 7fr 5fr;
-        }
-
-        .exhibit-block:nth-child(even) .exhibit-text {
-            order: -1;
-            text-align: right;
-        }
-
-        /* High-End Image Treatment */
-        .exhibit-image-wrapper {
-            position: relative;
-            overflow: hidden;
-            border-radius: 2px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-        }
-
-        .exhibit-image-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--accent-red);
-            mix-blend-mode: overlay;
-            opacity: 0.2;
-            transition: opacity 1s var(--ease-cinematic);
-        }
-
-        .exhibit-image-wrapper:hover::after {
-            opacity: 0;
-        }
-
-        .exhibit-img {
+        body, html {
             width: 100%;
-            height: 70vh;
-            object-fit: cover;
-            filter: grayscale(80%) contrast(1.2);
-            transition: transform 2s var(--ease-cinematic), filter 1s var(--ease-cinematic);
-        }
-
-        .exhibit-image-wrapper:hover .exhibit-img {
-            transform: scale(1.05);
-            filter: grayscale(0%) contrast(1.1);
-        }
-
-        .image-caption {
-            position: absolute;
-            bottom: -30px;
-            right: 0;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            transform: rotate(-90deg);
-            transform-origin: right bottom;
-        }
-
-        /* Typography Treatment */
-        .exhibit-meta {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            color: var(--accent-red);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .exhibit-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 5vw, 6rem);
-            line-height: 1.1;
-            margin-bottom: 30px;
-        }
-
-        .exhibit-body {
-            font-size: 1.1rem;
-            font-weight: 300;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            max-width: 500px;
-        }
-
-        .exhibit-block:nth-child(even) .exhibit-body {
-            margin-left: auto; /* Align right */
-        }
-
-        .quote-insert {
-            font-family: 'WindSong', cursive;
-            font-size: 3rem;
-            color: var(--text-main);
-            line-height: 1.2;
-            margin: 40px 0;
+            background-color: var(--bg-void);
+            color: var(--text-stardust);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            overscroll-behavior: none; /* Prevents bounce on Mac */
         }
 
         /* =========================================
-           ENDLESS TAPESTRY (MAGAZINE LAYOUT)
+           SVG FLUID ENGINE (HIDDEN)
            ========================================= */
-        .editorial-essay {
-            padding: 10vh 5vw;
-            background: #040303;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            z-index: 5;
-        }
+        .svg-filters { position: absolute; width: 0; height: 0; pointer-events: none; }
 
-        .essay-header {
-            text-align: center;
-            margin-bottom: 10vh;
+        /* =========================================
+           CINEMATIC LOADER
+           ========================================= */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--bg-void); z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
         }
-
-        .essay-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(4rem, 8vw, 8rem);
-            font-style: italic;
-            opacity: 0.1;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            top: 5vh;
-            pointer-events: none;
+        .loader-text {
+            font-family: 'Syncopate', sans-serif; font-size: 8vw; font-weight: 700;
+            color: transparent; -webkit-text-stroke: 1px var(--accent-gold);
+            position: relative; overflow: hidden;
         }
-
-        .essay-columns {
-            column-count: 2;
-            column-gap: 6vw;
-            max-width: 1400px;
-            margin: 0 auto;
-            font-size: 1.15rem;
-            font-weight: 300;
-            color: var(--text-muted);
-            text-align: justify;
+        .loader-fill {
+            position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+            background: var(--accent-gold); mix-blend-mode: screen; transition: width 0.1s linear;
         }
+        .loader-meta { font-family: 'Syncopate', sans-serif; font-size: 10px; letter-spacing: 8px; margin-top: 20px; color: var(--accent-gold); }
 
-        .essay-columns p {
-            margin-bottom: 2rem;
-            break-inside: avoid;
+        /* =========================================
+           CANVAS BACKGROUND
+           ========================================= */
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+
+        /* =========================================
+           MAGNETIC FLUID CURSOR
+           ========================================= */
+        .cursor-aura {
+            position: fixed; width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, background 0.3s;
+            display: flex; justify-content: center; align-items: center; font-family: 'Syncopate', sans-serif; font-size: 8px; color: transparent;
         }
-
-        .essay-columns p:first-child::first-letter {
-            font-family: 'Playfair Display', serif;
-            font-size: 6rem;
-            float: left;
-            line-height: 0.8;
-            padding-right: 15px;
-            color: var(--accent-red);
-        }
-
-        @media (max-width: 900px) {
-            .exhibit-block, .exhibit-block:nth-child(even) {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            .exhibit-block:nth-child(even) .exhibit-text {
-                order: 1;
-                text-align: left;
-            }
-            .exhibit-block:nth-child(even) .exhibit-body {
-                margin-left: 0;
-            }
-            .essay-columns {
-                column-count: 1;
-                text-align: left;
-            }
-            .exhibit-img {
-                height: 50vh;
-            }
+        .cursor-dot {
+            position: fixed; width: 4px; height: 4px; background: var(--text-stardust);
+            border-radius: 50%; pointer-events: none; z-index: 10000;
+            transform: translate(-50%, -50%);
         }
 
         /* =========================================
-           SCROLL ANIMATION CLASSES
+           SMOOTH SCROLL WRAPPER
            ========================================= */
-        .reveal-up {
-            opacity: 0;
-            transform: translateY(60px);
-            transition: opacity 1.2s var(--ease-cinematic), transform 1.2s var(--ease-cinematic);
+        #smooth-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; overflow: hidden; z-index: 1; }
+        #smooth-content { will-change: transform; width: 100%; }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero { height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+        .hero-text-wrap { text-align: center; perspective: 1000px; z-index: 2; }
+        .hero-title {
+            font-family: 'Cinzel', serif; font-size: 10vw; line-height: 0.85;
+            text-transform: uppercase; mix-blend-mode: exclusion;
         }
-        .reveal-up.active {
-            opacity: 1;
-            transform: translateY(0);
+        .title-line { display: block; overflow: hidden; }
+        .title-line span { display: inline-block; transform: translateY(100%); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
+        .hero.active .title-line span { transform: translateY(0); }
+        
+        /* Hero Center Image */
+        .hero-image-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8) rotate(-2deg);
+            width: 25vw; height: 35vw; object-fit: cover; z-index: 1; opacity: 0; transition: all 2s cubic-bezier(0.19, 1, 0.22, 1);
+            filter: grayscale(100%);
+        }
+        .hero.active .hero-image-center { opacity: 0.3; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+
+        /* =========================================
+           SPATIAL GALLERY (LIQUID DISTORTION)
+           ========================================= */
+        .gallery-space { padding: 15vh 0; display: flex; flex-direction: column; gap: 25vh; }
+        .gallery-item {
+            display: flex; align-items: center; justify-content: space-between; padding: 0 10vw;
+            perspective: 1000px;
+        }
+        .gallery-item:nth-child(even) { flex-direction: row-reverse; }
+        
+        .image-wrapper {
+            width: 35vw; height: 50vh; position: relative;
+            /* Apply SVG Filter */
+            filter: url(#liquid-distortion);
+            transition: transform 0.4s ease-out;
+        }
+        .image-wrapper img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(100%); transition: filter 0.8s;
+        }
+        .image-wrapper:hover img { filter: grayscale(0%); }
+        .image-wrapper::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(212, 175, 55, 0.15); mix-blend-mode: overlay; pointer-events: none;
+        }
+
+        .text-wrapper { width: 40vw; z-index: 2; }
+        .text-meta { font-family: 'Syncopate', sans-serif; font-size: 10px; letter-spacing: 4px; color: var(--accent-gold); display: block; margin-bottom: 20px; }
+        .text-title { font-family: 'Cinzel', serif; font-size: 4vw; line-height: 1.1; margin-bottom: 30px; text-transform: uppercase; }
+        .text-body { font-size: 1.4vw; line-height: 1.6; color: rgba(240, 235, 225, 0.8); }
+
+        /* =========================================
+           POETRY WALL
+           ========================================= */
+        .poetry-void { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0 10vw; }
+        .poetry-text {
+            font-size: 4.5vw; text-align: center; line-height: 1.2;
+            font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(255,255,255,0.1);
+            background: linear-gradient(to right, var(--text-stardust) 50%, rgba(255,255,255,0.1) 50%);
+            background-size: 200% 100%; background-position: 100% 0;
+            -webkit-background-clip: text; transition: background-position 0.1s linear;
         }
 
         /* =========================================
-           LUXURY FOOTER
+           FINALE BUTTON
            ========================================= */
-        .grand-finale {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            background: var(--bg-dark);
-            overflow: hidden;
+        .finale { height: 80vh; display: flex; align-items: center; justify-content: center; }
+        .magnetic-btn {
+            position: relative; display: inline-block; padding: 30px 60px; border: 1px solid var(--accent-gold);
+            border-radius: 100px; text-transform: uppercase; font-family: 'Syncopate', sans-serif; letter-spacing: 3px;
+            color: var(--text-stardust); text-decoration: none; overflow: hidden; background: transparent;
         }
-
-        .grand-finale h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 8vw, 8rem);
-            z-index: 2;
+        .magnetic-btn::before {
+            content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
+            background: var(--accent-gold); transition: top 0.4s cubic-bezier(0.19, 1, 0.22, 1); z-index: -1;
         }
-
-        .grand-finale .author {
-            margin-top: 40px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            z-index: 2;
-        }
-
-        /* Big background overlay text */
-        .bg-text {
-            position: absolute;
-            font-family: 'Inter', sans-serif;
-            font-size: 25vw;
-            font-weight: 800;
-            color: rgba(255,255,255,0.02);
-            line-height: 0.8;
-            z-index: 1;
-            pointer-events: none;
-        }
+        .magnetic-btn:hover::before { top: 0; }
+        .magnetic-btn:hover { color: var(--bg-void); font-weight: bold; }
 
     </style>
 </head>
 <body>
 
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-ring" id="cursor-ring"></div>
+    <svg class="svg-filters">
+        <filter id="liquid-distortion">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
+            <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
 
-    <!-- AMBIENT MESH -->
-    <div class="ambient-mesh">
-        <div class="glow-orb"></div>
-        <div class="glow-orb"></div>
+    <div id="loader">
+        <div class="loader-text">
+            <span style="position: relative; z-index: 2;">RENDERING</span>
+            <div class="loader-fill" id="loader-fill"></div>
+        </div>
+        <div class="loader-meta" id="loader-perc">0.00%</div>
     </div>
 
-    <!-- HERO SECTION -->
-    <header id="hero">
-        <div class="hero-meta">A Digital Exhibition • Vol. I</div>
-        <h1 class="hero-title">
-            The Architecture 
-            <span>of Us</span>
-        </h1>
-        
-        <div class="scroll-indicator">
-            <span style="font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;">Descend</span>
-            <div class="scroll-line"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="cursor-aura" id="cursor-aura"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
+    <main id="smooth-wrapper">
+        <div id="smooth-content">
+            
+            <section class="hero" id="hero">
+                <img src="https://images.unsplash.com/photo-1518599904199-0ca897819ddb?auto=format&fit=crop&w=1000&q=80" class="hero-image-center" alt="Centerpiece">
+                <div class="hero-text-wrap">
+                    <h1 class="hero-title">
+                        <span class="title-line"><span>THE</span></span>
+                        <span class="title-line"><span>UNIVERSE</span></span>
+                        <span class="title-line"><span style="color: var(--accent-gold); font-style: italic;">OF YOU</span></span>
+                    </h1>
+                </div>
+            </section>
+
+            <section class="gallery-space">
+                
+                <article class="gallery-item">
+                    <div class="image-wrapper js-liquid">
+                        <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1000&q=80" alt="Memory">
+                    </div>
+                    <div class="text-wrapper parallax-text" data-speed="0.1">
+                        <span class="text-meta">PHASE 01: GRAVITY</span>
+                        <h2 class="text-title">The Pull</h2>
+                        <p class="text-body">I used to think that gravity was just a physical law of planets. Then you walked into the room. Suddenly, everything loud went quiet, and my entire axis shifted to align with yours.</p>
+                    </div>
+                </article>
+
+                <article class="gallery-item">
+                    <div class="image-wrapper js-liquid">
+                        <img src="https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=1000&q=80" alt="Memory">
+                    </div>
+                    <div class="text-wrapper parallax-text" data-speed="0.15">
+                        <span class="text-meta">PHASE 02: TIME DILATION</span>
+                        <h2 class="text-title">The Stillness</h2>
+                        <p class="text-body">With you, time behaves differently. Hours feel like seconds when we talk, yet a single second spent looking into your eyes holds the weight of an entire lifetime.</p>
+                    </div>
+                </article>
+
+            </section>
+
+            <section class="poetry-void">
+                <div class="poetry-text" id="poetry-scroll">
+                    "If the universe is expanding infinitely, I am convinced it is only doing so to make enough room for the magnitude of what I feel for you. We are not just a passing moment. We are an epoch."
+                </div>
+            </section>
+
+            <section class="finale">
+                <a href="#" class="magnetic-btn" id="magnetic-btn">Claim Forever</a>
+            </section>
+
+            <div style="height: 5vh;"></div>
         </div>
-    </header>
-
-    <!-- KINETIC MARQUEE 1 -->
-    <section class="marquee-container interactive-hover">
-        <div class="marquee-track">
-            <div class="marquee-text">
-                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span> 
-                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span>
-            </div>
-            <!-- Duplicate for infinite scroll loop -->
-            <div class="marquee-text">
-                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span> 
-                If I had to live it all again <span>✦</span> I would find you sooner <span>✦</span> I would love you longer <span>✦</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- MAIN EXHIBITION -->
-    <main class="exhibition">
-
-        <!-- ARTIFACT 01 -->
-        <article class="exhibit-block reveal-up">
-            <div class="exhibit-image-wrapper interactive-hover">
-                <img src="xBTtJNl%20-%20Imgur.jpg" alt="Memory" class="exhibit-img">
-                <div class="image-caption">Fig. 01 — The Genesis</div>
-            </div>
-            <div class="exhibit-text">
-                <span class="exhibit-meta">Artifact 01</span>
-                <h2 class="exhibit-title">The Moment<br>You Existed</h2>
-                <p class="exhibit-body">
-                    Every time I see you, the world feels softer. It is as if the chaotic frequency of the universe is suddenly dialed down into a quiet hum. You are not just beautiful—you are the exact definition of comfort, rendered in human form. 
-                </p>
-                <p class="exhibit-body">
-                    I used to think peace was a place. Now I know it is a person. 
-                </p>
-                <div class="quote-insert">"My eyes would still only look for you."</div>
-            </div>
-        </article>
-
-        <!-- ARTIFACT 02 -->
-        <article class="exhibit-block reveal-up">
-            <div class="exhibit-text">
-                <span class="exhibit-meta">Artifact 02</span>
-                <h2 class="exhibit-title">Your Silent<br>Sorcery</h2>
-                <p class="exhibit-body">
-                    You don’t even realize it, do you? The way your mere presence shifts the gravity in the room. The way you exist is a living breathing poetry that requires no translation. 
-                </p>
-                <p class="exhibit-body">
-                    I find myself studying the micro-expressions on your face, memorizing the typography of your smile. It is an unconscious devotion. You have quietly rewired the way I perceive joy.
-                </p>
-            </div>
-            <div class="exhibit-image-wrapper interactive-hover">
-                <img src="AbmCfZ2%20-%20Imgur.jpg" alt="Memory" class="exhibit-img">
-                <div class="image-caption">Fig. 02 — The Anchor</div>
-            </div>
-        </article>
-
-        <!-- ARTIFACT 03 -->
-        <article class="exhibit-block reveal-up">
-            <div class="exhibit-image-wrapper interactive-hover">
-                <img src="GHKaV5z%20-%20Imgur.png" alt="Memory" class="exhibit-img">
-                <div class="image-caption">Fig. 03 — The Light</div>
-            </div>
-            <div class="exhibit-text">
-                <span class="exhibit-meta">Artifact 03</span>
-                <h2 class="exhibit-title">The Breaking<br>Dawn</h2>
-                <p class="exhibit-body">
-                    Even on my heaviest days, when the world demands too much, a single thought of you acts as a lighthouse. You became my calm without asking, without forcing. 
-                </p>
-                <div class="quote-insert">"I never want to go back to who I was before you."</div>
-                <p class="exhibit-body">
-                    You didn’t just enter my life; you illuminated its dark corners. You showed me the brilliance of sharing existence with a soul that completely, unconditionally understands yours.
-                </p>
-            </div>
-        </article>
-
-        <!-- ARTIFACT 04 -->
-        <article class="exhibit-block reveal-up">
-            <div class="exhibit-text">
-                <span class="exhibit-meta">Artifact 04</span>
-                <h2 class="exhibit-title">The Concept<br>of Forever</h2>
-                <p class="exhibit-body">
-                    I do not know the exact coordinates of our future. But I know the trajectory. If forever is a place, its roads will endlessly loop back to you and me. 
-                </p>
-                <p class="exhibit-body">
-                    I want to build worlds with you. I want to weather the storms and stand quietly in the golden hours of our life together, looking back at the masterpiece we constructed simply by choosing each other.
-                </p>
-            </div>
-            <div class="exhibit-image-wrapper interactive-hover">
-                <img src="e8Ww4Dx%20-%20Imgur.png" alt="Memory" class="exhibit-img">
-                <div class="image-caption">Fig. 04 — The Eternity</div>
-            </div>
-        </article>
-
     </main>
 
-    <!-- ENDLESS TAPESTRY OF TEXT (EDITORIAL ESSAY) -->
-    <section class="editorial-essay reveal-up">
-        <div class="essay-header">
-            <h2>Infinite Tapestry</h2>
-        </div>
-        <div class="essay-columns">
-            <p>
-                If I could offer you one impossible gift, it would be my eyes. Just for five minutes. I would want you to step inside my mind and look at yourself the exact way that I look at you. You spend so much time analyzing your perceived flaws, while I spend my time staring at them as if they are the intentional, masterful brushstrokes of a Renaissance painting. There is a geometry to the way you move, a specific cadence to your laugh that I have mapped out in the deepest parts of my memory. 
-            </p>
-            <p>
-                To love you is not a passive event. It is an active, ongoing phenomenon. I love the intricate labyrinth of your thoughts. I love how you feel things with such terrifying depth, and yet you carry yourself with this effortless, floating grace. You are a sanctuary in a world that rarely stops spinning.
-            </p>
-            <p>
-                Sometimes I think about the sheer mathematical improbability of us. Think about the billions of years of cosmic expansion, the countless civilizations rising and falling, the sheer infinite stretch of human history. Yet, out of all the timelines, out of all the centuries, my timeline collided with yours. We get to exist right now, breathing the same air, under the exact same sky. That is not a coincidence. That is a deliberate act of the universe. 
-            </p>
-            <p>
-                And because of that, my devotion to you is not just a feeling—it is a vow. I do not promise absolute perfection, because human hands are inherently flawed. I do not promise days without rain. But I promise the umbrella. I promise my absolute presence. I promise to be the person who stays, who fights, who listens, and who chooses you over and over again, in every single version of reality, until the stars burn out.
-            </p>
-        </div>
-    </section>
-
-    <!-- GRAND FINALE -->
-    <footer class="grand-finale reveal-up">
-        <div class="bg-text">ALWAYS</div>
-        <h1>You are my favorite<br>place in this world.</h1>
-        <div class="author">— orxnge</div>
-    </footer>
-
-    <!-- INTERACTION SCRIPTS -->
     <script>
-        // Custom Cursor Logic
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorRing = document.getElementById('cursor-ring');
-        const hoverElements = document.querySelectorAll('.interactive-hover, a, button');
+        /**
+         * 1. CINEMATIC LOADER
+         */
+        let loadPerc = 0;
+        const loaderPercText = document.getElementById('loader-perc');
+        const loaderFill = document.getElementById('loader-fill');
+        const loader = document.getElementById('loader');
 
-        window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-
-            // Instantly move the dot
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-
-            // Slightly delay the ring for cinematic drag effect
-            cursorRing.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
-        });
-
-        // Hover effect for images and interactive elements
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorRing.style.width = '80px';
-                cursorRing.style.height = '80px';
-                cursorRing.style.borderColor = 'var(--accent-red)';
-                cursorRing.style.backgroundColor = 'var(--accent-glow)';
-                cursorDot.style.opacity = '0';
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                cursorRing.style.width = '40px';
-                cursorRing.style.height = '40px';
-                cursorRing.style.borderColor = 'var(--text-muted)';
-                cursorRing.style.backgroundColor = 'transparent';
-                cursorDot.style.opacity = '1';
-            });
-        });
-
-        // Scroll Reveal Logic (Intersection Observer)
-        const revealElements = document.querySelectorAll('.reveal-up');
-
-        const revealOptions = {
-            threshold: 0.15,
-            rootMargin: "0px 0px -100px 0px"
+        // Wait for page to actually load to prevent math errors later
+        window.onload = () => {
+            let loadInterval = setInterval(() => {
+                loadPerc += Math.random() * 8;
+                if(loadPerc >= 100) {
+                    loadPerc = 100;
+                    clearInterval(loadInterval);
+                    loaderPercText.innerText = '100.00%';
+                    loaderFill.style.width = '100%';
+                    
+                    setTimeout(() => {
+                        loader.style.transform = 'translateY(-100%)';
+                        document.getElementById('hero').classList.add('active');
+                        // Ensure ResizeObserver calculates correctly after reveal
+                        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+                    }, 600);
+                } else {
+                    loaderPercText.innerText = loadPerc.toFixed(2) + '%';
+                    loaderFill.style.width = loadPerc + '%';
+                }
+            }, 50);
         };
 
-        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) {
-                    return;
-                } else {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, revealOptions);
+        /**
+         * 2. BULLETPROOF MOMENTUM SCROLL (RESIZE OBSERVER)
+         */
+        const body = document.body;
+        const scrollWrapper = document.getElementById('smooth-content');
+        let currentY = 0, targetY = 0;
+        const ease = 0.08;
 
-        revealElements.forEach(el => {
-            revealOnScroll.observe(el);
+        // The Fix: ResizeObserver automatically updates body height if images load late
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                body.style.height = `${entry.contentRect.height}px`;
+            }
         });
+        resizeObserver.observe(scrollWrapper);
+        
+        window.addEventListener('scroll', () => { targetY = window.scrollY; });
+
+        /**
+         * 3. CURSOR & LIQUID HOVER PHYSICS
+         */
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorAura = document.getElementById('cursor-aura');
+        const displacementMap = document.getElementById('displacement');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let auraX = mouseX, auraY = mouseY;
+        let liquidScale = 0, targetLiquidScale = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+        });
+
+        // Liquid Hover Trigger
+        document.querySelectorAll('.js-liquid').forEach(el => {
+            el.addEventListener('mouseenter', () => { targetLiquidScale = 60; cursorAura.style.width = '80px'; cursorAura.style.height = '80px'; });
+            el.addEventListener('mouseleave', () => { targetLiquidScale = 0; cursorAura.style.width = '40px'; cursorAura.style.height = '40px'; });
+        });
+
+        // Magnetic Button
+        const magBtn = document.getElementById('magnetic-btn');
+        magBtn.addEventListener('mousemove', (e) => {
+            const rect = magBtn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            magBtn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            cursorAura.style.background = 'var(--text-stardust)';
+            cursorAura.style.mixBlendMode = 'difference';
+        });
+        magBtn.addEventListener('mouseleave', () => {
+            magBtn.style.transform = `translate(0px, 0px)`;
+            cursorAura.style.background = 'transparent';
+            cursorAura.style.mixBlendMode = 'normal';
+        });
+
+        /**
+         * 4. CANVAS CONSTELLATION ENGINE
+         */
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+        let particles = [];
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.4)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+        /**
+         * 5. THE MASTER RENDER LOOP
+         */
+        const poetryScroll = document.getElementById('poetry-scroll');
+
+        function renderLoop() {
+            // Scroll Math
+            currentY += (targetY - currentY) * ease;
+            // Round off to prevent sub-pixel blurring
+            const roundedY = Math.round(currentY * 100) / 100;
+            scrollWrapper.style.transform = `translate3d(0, -${roundedY}px, 0)`;
+
+            // Parallax
+            document.querySelectorAll('.parallax-text').forEach(el => {
+                let speed = el.getAttribute('data-speed');
+                el.style.transform = `translateY(${roundedY * speed}px)`;
+            });
+
+            // Liquid Animation Math
+            liquidScale += (targetLiquidScale - liquidScale) * 0.1;
+            displacementMap.setAttribute('scale', liquidScale);
+
+            // Poetry Reveal
+            let poetryRect = poetryScroll.getBoundingClientRect();
+            let poetryOffset = window.innerHeight - poetryRect.top;
+            if(poetryOffset > 0) {
+                let percent = (poetryOffset / window.innerHeight) * 100;
+                poetryScroll.style.backgroundPosition = `${100 - percent}% 0`;
+            }
+
+            // Cursor Math
+            auraX += (mouseX - auraX) * 0.15;
+            auraY += (mouseY - auraY) * 0.15;
+            cursorAura.style.left = `${auraX}px`;
+            cursorAura.style.top = `${auraY}px`;
+
+            // Canvas Draw
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        renderLoop();
+
     </script>
 </body>
 </html>
