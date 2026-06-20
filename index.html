@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Epoch of Us | Final Masterpiece</title>
+    <title>The Epoch of Us | Masterpiece</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syncopate:wght@400;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
@@ -16,6 +16,7 @@
             --text-stardust: #f0ebe1;
             --accent-crimson: #8a1c25;
             --accent-gold: #d4af37;
+            --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
@@ -26,12 +27,9 @@
             color: var(--text-stardust);
             font-family: 'Cormorant Garamond', serif;
             overflow-x: hidden;
-            overscroll-behavior: none; /* Prevents bounce on Mac */
+            overscroll-behavior: none;
         }
 
-        /* =========================================
-           SVG FLUID ENGINE (HIDDEN)
-           ========================================= */
         .svg-filters { position: absolute; width: 0; height: 0; pointer-events: none; }
 
         /* =========================================
@@ -41,7 +39,7 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: var(--bg-void); z-index: 10000;
             display: flex; justify-content: center; align-items: center;
-            flex-direction: column; transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+            flex-direction: column; transition: transform 1.2s var(--ease-cinematic);
         }
         .loader-text {
             font-family: 'Syncopate', sans-serif; font-size: 8vw; font-weight: 700;
@@ -90,16 +88,15 @@
             text-transform: uppercase; mix-blend-mode: exclusion;
         }
         .title-line { display: block; overflow: hidden; }
-        .title-line span { display: inline-block; transform: translateY(100%); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
+        .title-line span { display: inline-block; transform: translateY(100%); transition: transform 1.2s var(--ease-cinematic); }
         .hero.active .title-line span { transform: translateY(0); }
         
-        /* Hero Center Image */
         .hero-image-center {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8) rotate(-2deg);
-            width: 25vw; height: 35vw; object-fit: cover; z-index: 1; opacity: 0; transition: all 2s cubic-bezier(0.19, 1, 0.22, 1);
+            width: 25vw; height: 35vw; object-fit: cover; z-index: 1; opacity: 0; transition: all 2s var(--ease-cinematic);
             filter: grayscale(100%);
         }
-        .hero.active .hero-image-center { opacity: 0.3; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        .hero.active .hero-image-center { opacity: 0.35; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
 
         /* =========================================
            SPATIAL GALLERY (LIQUID DISTORTION)
@@ -113,24 +110,24 @@
         
         .image-wrapper {
             width: 35vw; height: 50vh; position: relative;
-            /* Apply SVG Filter */
             filter: url(#liquid-distortion);
             transition: transform 0.4s ease-out;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
         .image-wrapper img {
             width: 100%; height: 100%; object-fit: cover;
-            filter: grayscale(100%); transition: filter 0.8s;
+            filter: grayscale(80%) contrast(1.1); transition: filter 0.8s, transform 0.8s;
         }
-        .image-wrapper:hover img { filter: grayscale(0%); }
+        .image-wrapper:hover img { filter: grayscale(0%) contrast(1); transform: scale(1.02); }
         .image-wrapper::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(212, 175, 55, 0.15); mix-blend-mode: overlay; pointer-events: none;
+            background: rgba(138, 28, 37, 0.15); mix-blend-mode: overlay; pointer-events: none;
         }
 
         .text-wrapper { width: 40vw; z-index: 2; }
         .text-meta { font-family: 'Syncopate', sans-serif; font-size: 10px; letter-spacing: 4px; color: var(--accent-gold); display: block; margin-bottom: 20px; }
-        .text-title { font-family: 'Cinzel', serif; font-size: 4vw; line-height: 1.1; margin-bottom: 30px; text-transform: uppercase; }
-        .text-body { font-size: 1.4vw; line-height: 1.6; color: rgba(240, 235, 225, 0.8); }
+        .text-title { font-family: 'Cinzel', serif; font-size: 3.5vw; line-height: 1.1; margin-bottom: 30px; text-transform: uppercase; }
+        .text-body { font-size: 1.3vw; line-height: 1.6; color: rgba(240, 235, 225, 0.8); }
 
         /* =========================================
            POETRY WALL
@@ -152,13 +149,38 @@
             position: relative; display: inline-block; padding: 30px 60px; border: 1px solid var(--accent-gold);
             border-radius: 100px; text-transform: uppercase; font-family: 'Syncopate', sans-serif; letter-spacing: 3px;
             color: var(--text-stardust); text-decoration: none; overflow: hidden; background: transparent;
+            transition: background 0.3s, color 0.3s; z-index: 10;
         }
         .magnetic-btn::before {
             content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
-            background: var(--accent-gold); transition: top 0.4s cubic-bezier(0.19, 1, 0.22, 1); z-index: -1;
+            background: var(--accent-gold); transition: top 0.4s var(--ease-cinematic); z-index: -1;
         }
         .magnetic-btn:hover::before { top: 0; }
         .magnetic-btn:hover { color: var(--bg-void); font-weight: bold; }
+
+        /* =========================================
+           THE BEAUTIFUL REVEAL (PORTAL)
+           ========================================= */
+        #beautiful-portal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: #0a0304; z-index: 1005; display: flex; justify-content: center;
+            align-items: center; flex-direction: column; opacity: 0; pointer-events: none;
+            transition: opacity 1.5s var(--ease-cinematic);
+        }
+        #beautiful-portal.active { opacity: 1; pointer-events: auto; }
+        
+        .portal-bg-glow {
+            position: absolute; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(138,28,37,0.3) 0%, transparent 70%);
+            filter: blur(50px); animation: pulsingGlow 8s infinite alternate ease-in-out;
+        }
+        .portal-content { text-align: center; max-width: 70vw; z-index: 2; transform: translateY(40px); transition: transform 2s var(--ease-cinematic); }
+        #beautiful-portal.active .portal-content { transform: translateY(0); }
+        
+        .portal-cursive { font-family: 'WindSong', cursive; font-size: clamp(4rem, 8vw, 10rem); color: var(--accent-gold); margin-bottom: 20px; }
+        .portal-serif { font-family: 'Cinzel', serif; font-size: clamp(1.5rem, 3vw, 4rem); letter-spacing: 6px; text-transform: uppercase; line-height: 1.4; margin-bottom: 40px; }
+        .portal-body { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 2vw, 2.5rem); color: rgba(240, 235, 225, 0.7); max-width: 600px; margin: 0 auto; line-height: 1.5; }
+
+        @keyframes pulsingGlow { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 0.9; } }
 
     </style>
 </head>
@@ -173,7 +195,7 @@
 
     <div id="loader">
         <div class="loader-text">
-            <span style="position: relative; z-index: 2;">RENDERING</span>
+            <span style="position: relative; z-index: 2;">IGNITING</span>
             <div class="loader-fill" id="loader-fill"></div>
         </div>
         <div class="loader-meta" id="loader-perc">0.00%</div>
@@ -184,11 +206,20 @@
     <div class="cursor-aura" id="cursor-aura"></div>
     <div class="cursor-dot" id="cursor-dot"></div>
 
+    <div id="beautiful-portal">
+        <div class="portal-bg-glow"></div>
+        <div class="portal-content">
+            <div class="portal-cursive">Forever Confirmed</div>
+            <h2 class="portal-serif">You are my favorite place in this world.</h2>
+            <p class="portal-body">"In every layout, every line of script, and every corner of this infinite canvas... it always structuralizes back to you."</p>
+        </div>
+    </div>
+
     <main id="smooth-wrapper">
         <div id="smooth-content">
             
             <section class="hero" id="hero">
-                <img src="https://images.unsplash.com/photo-1518599904199-0ca897819ddb?auto=format&fit=crop&w=1000&q=80" class="hero-image-center" alt="Centerpiece">
+                <img src="xBTtJNl - Imgur.jpg" class="hero-image-center" alt="Centerpiece">
                 <div class="hero-text-wrap">
                     <h1 class="hero-title">
                         <span class="title-line"><span>THE</span></span>
@@ -202,9 +233,9 @@
                 
                 <article class="gallery-item">
                     <div class="image-wrapper js-liquid">
-                        <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1000&q=80" alt="Memory">
+                        <img src="AbmCfZ2 - Imgur.jpg" alt="Memory 1">
                     </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.1">
+                    <div class="text-wrapper parallax-text" data-speed="0.08">
                         <span class="text-meta">PHASE 01: GRAVITY</span>
                         <h2 class="text-title">The Pull</h2>
                         <p class="text-body">I used to think that gravity was just a physical law of planets. Then you walked into the room. Suddenly, everything loud went quiet, and my entire axis shifted to align with yours.</p>
@@ -213,12 +244,23 @@
 
                 <article class="gallery-item">
                     <div class="image-wrapper js-liquid">
-                        <img src="https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=1000&q=80" alt="Memory">
+                        <img src="GHKaV5z - Imgur.png" alt="Memory 2">
                     </div>
-                    <div class="text-wrapper parallax-text" data-speed="0.15">
+                    <div class="text-wrapper parallax-text" data-speed="0.12">
                         <span class="text-meta">PHASE 02: TIME DILATION</span>
                         <h2 class="text-title">The Stillness</h2>
                         <p class="text-body">With you, time behaves differently. Hours feel like seconds when we talk, yet a single second spent looking into your eyes holds the weight of an entire lifetime.</p>
+                    </div>
+                </article>
+
+                <article class="gallery-item">
+                    <div class="image-wrapper js-liquid">
+                        <img src="e8Ww4Dx - Imgur.png" alt="Memory 3">
+                    </div>
+                    <div class="text-wrapper parallax-text" data-speed="0.16">
+                        <span class="text-meta">PHASE 03: EVENT HORIZON</span>
+                        <h2 class="text-title">No Return</h2>
+                        <p class="text-body">I do not want to go back to who I was before this. You are not just a chapter in my story. You are the ink, the paper, and the author of the best version of me.</p>
                     </div>
                 </article>
 
@@ -231,23 +273,22 @@
             </section>
 
             <section class="finale">
-                <a href="#" class="magnetic-btn" id="magnetic-btn">Claim Forever</a>
+                <button class="magnetic-btn" id="magnetic-btn">Claim Forever</button>
             </section>
 
-            <div style="height: 5vh;"></div>
+            <div style="height: 10vh;"></div>
         </div>
     </main>
 
     <script>
         /**
-         * 1. CINEMATIC LOADER
+         * 1. STABILIZED ASYNC PRELOADER
          */
         let loadPerc = 0;
         const loaderPercText = document.getElementById('loader-perc');
         const loaderFill = document.getElementById('loader-fill');
         const loader = document.getElementById('loader');
 
-        // Wait for page to actually load to prevent math errors later
         window.onload = () => {
             let loadInterval = setInterval(() => {
                 loadPerc += Math.random() * 8;
@@ -260,25 +301,23 @@
                     setTimeout(() => {
                         loader.style.transform = 'translateY(-100%)';
                         document.getElementById('hero').classList.add('active');
-                        // Ensure ResizeObserver calculates correctly after reveal
                         setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
                     }, 600);
                 } else {
                     loaderPercText.innerText = loadPerc.toFixed(2) + '%';
                     loaderFill.style.width = loadPerc + '%';
                 }
-            }, 50);
+            }, 40);
         };
 
         /**
-         * 2. BULLETPROOF MOMENTUM SCROLL (RESIZE OBSERVER)
+         * 2. LERP-DRIVEN MOMENTUM SCROLL ENGINE
          */
         const body = document.body;
         const scrollWrapper = document.getElementById('smooth-content');
         let currentY = 0, targetY = 0;
         const ease = 0.08;
 
-        // The Fix: ResizeObserver automatically updates body height if images load late
         const resizeObserver = new ResizeObserver(entries => {
             for (let entry of entries) {
                 body.style.height = `${entry.contentRect.height}px`;
@@ -289,7 +328,7 @@
         window.addEventListener('scroll', () => { targetY = window.scrollY; });
 
         /**
-         * 3. CURSOR & LIQUID HOVER PHYSICS
+         * 3. COORDINATE FLUID CURSOR & SVG FILTER RESCALE
          */
         const cursorDot = document.getElementById('cursor-dot');
         const cursorAura = document.getElementById('cursor-aura');
@@ -304,30 +343,60 @@
             cursorDot.style.top = `${mouseY}px`;
         });
 
-        // Liquid Hover Trigger
+        // Attach SVG interactive warping
         document.querySelectorAll('.js-liquid').forEach(el => {
-            el.addEventListener('mouseenter', () => { targetLiquidScale = 60; cursorAura.style.width = '80px'; cursorAura.style.height = '80px'; });
-            el.addEventListener('mouseleave', () => { targetLiquidScale = 0; cursorAura.style.width = '40px'; cursorAura.style.height = '40px'; });
+            el.addEventListener('mouseenter', () => { 
+                targetLiquidScale = 45; 
+                cursorAura.style.width = '70px'; 
+                cursorAura.style.height = '70px';
+                cursorAura.style.borderColor = 'var(--accent-crimson)';
+            });
+            el.addEventListener('mouseleave', () => { 
+                targetLiquidScale = 0; 
+                cursorAura.style.width = '40px'; 
+                cursorAura.style.height = '40px';
+                cursorAura.style.borderColor = 'rgba(212, 175, 55, 0.5)';
+            });
         });
 
-        // Magnetic Button
+        /**
+         * 4. INTERACTIVE MAGNETIC BUTTON & CLOSING INTERSECTION PORTAL
+         */
         const magBtn = document.getElementById('magnetic-btn');
+        const portal = document.getElementById('beautiful-portal');
+
         magBtn.addEventListener('mousemove', (e) => {
             const rect = magBtn.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
-            magBtn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            magBtn.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
+            
+            cursorAura.style.width = '100px';
+            cursorAura.style.height = '100px';
             cursorAura.style.background = 'var(--text-stardust)';
             cursorAura.style.mixBlendMode = 'difference';
         });
+
         magBtn.addEventListener('mouseleave', () => {
             magBtn.style.transform = `translate(0px, 0px)`;
+            cursorAura.style.width = '40px';
+            cursorAura.style.height = '40px';
             cursorAura.style.background = 'transparent';
             cursorAura.style.mixBlendMode = 'normal';
         });
 
+        // The Grand Finale Click Action
+        magBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            portal.classList.add('active');
+            
+            // Minimal cursor update for the presentation state
+            cursorAura.style.width = '0px';
+            cursorAura.style.height = '0px';
+        });
+
         /**
-         * 4. CANVAS CONSTELLATION ENGINE
+         * 5. HIGH-DENSITY COSTELLATION BACKGROUND (CANVAS)
          */
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
@@ -339,8 +408,8 @@
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 1.5;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
             }
             update() {
                 this.x += this.speedX; this.y += this.speedY;
@@ -348,49 +417,46 @@
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
             }
             draw() {
-                ctx.fillStyle = 'rgba(212, 175, 55, 0.4)';
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
                 ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
-        for (let i = 0; i < 60; i++) particles.push(new Particle());
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
 
         /**
-         * 5. THE MASTER RENDER LOOP
+         * 6. SYSTEM MATHEMATICS RENDER LOOP (60FPS)
          */
         const poetryScroll = document.getElementById('poetry-scroll');
 
         function renderLoop() {
-            // Scroll Math
-            currentY += (targetY - currentY) * ease;
-            // Round off to prevent sub-pixel blurring
-            const roundedY = Math.round(currentY * 100) / 100;
-            scrollWrapper.style.transform = `translate3d(0, -${roundedY}px, 0)`;
+            // Only update layout positions if portal isn't actively covering
+            if(!portal.classList.contains('active')) {
+                currentY += (targetY - currentY) * ease;
+                const roundedY = Math.round(currentY * 100) / 100;
+                scrollWrapper.style.transform = `translate3d(0, -${roundedY}px, 0)`;
 
-            // Parallax
-            document.querySelectorAll('.parallax-text').forEach(el => {
-                let speed = el.getAttribute('data-speed');
-                el.style.transform = `translateY(${roundedY * speed}px)`;
-            });
+                document.querySelectorAll('.parallax-text').forEach(el => {
+                    let speed = el.getAttribute('data-speed');
+                    el.style.transform = `translateY(${roundedY * speed}px)`;
+                });
 
-            // Liquid Animation Math
+                let poetryRect = poetryScroll.getBoundingClientRect();
+                let poetryOffset = window.innerHeight - poetryRect.top;
+                if(poetryOffset > 0) {
+                    let percent = (poetryOffset / window.innerHeight) * 100;
+                    poetryScroll.style.backgroundPosition = `${100 - percent}% 0`;
+                }
+            }
+
+            // Keep drawing mouse cursors and backgrounds globally
             liquidScale += (targetLiquidScale - liquidScale) * 0.1;
             displacementMap.setAttribute('scale', liquidScale);
 
-            // Poetry Reveal
-            let poetryRect = poetryScroll.getBoundingClientRect();
-            let poetryOffset = window.innerHeight - poetryRect.top;
-            if(poetryOffset > 0) {
-                let percent = (poetryOffset / window.innerHeight) * 100;
-                poetryScroll.style.backgroundPosition = `${100 - percent}% 0`;
-            }
-
-            // Cursor Math
-            auraX += (mouseX - auraX) * 0.15;
-            auraY += (mouseY - auraY) * 0.15;
+            auraX += (mouseX - auraX) * 0.12;
+            auraY += (mouseY - auraY) * 0.12;
             cursorAura.style.left = `${auraX}px`;
             cursorAura.style.top = `${auraY}px`;
 
-            // Canvas Draw
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
 
@@ -403,7 +469,6 @@
         });
 
         renderLoop();
-
     </script>
 </body>
 </html>
