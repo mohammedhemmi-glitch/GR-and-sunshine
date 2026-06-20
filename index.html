@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Epoch of Us | Masterpiece</title>
+    <title>The Epoch of Us | Final Production</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syncopate:wght@400;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
-           CORE RESET & VARIABLES
+           CORE CONFIGURATION & FRAMING CONTROLS
            ========================================= */
         :root {
             --bg-void: #050505;
@@ -17,6 +17,14 @@
             --accent-crimson: #8a1c25;
             --accent-gold: #d4af37;
             --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
+
+            /* TUNING CONTROLS: Change these percentages to align her face perfectly.
+               0% = Top of image, 50% = Dead Center, 100% = Bottom of image
+            */
+            --hero-focus: center 25%;
+            --card-1-focus: center 20%;
+            --card-2-focus: center 50%;
+            --card-3-focus: center 30%;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
@@ -95,6 +103,7 @@
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8) rotate(-2deg);
             width: 25vw; height: 35vw; object-fit: cover; z-index: 1; opacity: 0; transition: all 2s var(--ease-cinematic);
             filter: grayscale(100%);
+            object-position: var(--hero-focus); /* Position Override */
         }
         .hero.active .hero-image-center { opacity: 0.35; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
 
@@ -119,6 +128,12 @@
             filter: grayscale(80%) contrast(1.1); transition: filter 0.8s, transform 0.8s;
         }
         .image-wrapper:hover img { filter: grayscale(0%) contrast(1); transform: scale(1.02); }
+        
+        /* Individual framing overrides mapping to our root focus positions */
+        .gallery-item:nth-child(1) .image-wrapper img { object-position: var(--card-1-focus); }
+        .gallery-item:nth-child(2) .image-wrapper img { object-position: var(--card-2-focus); }
+        .gallery-item:nth-child(3) .image-wrapper img { object-position: var(--card-3-focus); }
+
         .image-wrapper::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(138, 28, 37, 0.15); mix-blend-mode: overlay; pointer-events: none;
@@ -343,7 +358,6 @@
             cursorDot.style.top = `${mouseY}px`;
         });
 
-        // Attach SVG interactive warping
         document.querySelectorAll('.js-liquid').forEach(el => {
             el.addEventListener('mouseenter', () => { 
                 targetLiquidScale = 45; 
@@ -360,7 +374,7 @@
         });
 
         /**
-         * 4. INTERACTIVE MAGNETIC BUTTON & CLOSING INTERSECTION PORTAL
+         * 4. INTERACTIVE MAGNETIC BUTTON & CLOSING PORTAL
          */
         const magBtn = document.getElementById('magnetic-btn');
         const portal = document.getElementById('beautiful-portal');
@@ -385,18 +399,15 @@
             cursorAura.style.mixBlendMode = 'normal';
         });
 
-        // The Grand Finale Click Action
         magBtn.addEventListener('click', (e) => {
             e.preventDefault();
             portal.classList.add('active');
-            
-            // Minimal cursor update for the presentation state
             cursorAura.style.width = '0px';
             cursorAura.style.height = '0px';
         });
 
         /**
-         * 5. HIGH-DENSITY COSTELLATION BACKGROUND (CANVAS)
+         * 5. HIGH-DENSITY CONSTELLATION BACKGROUND (CANVAS)
          */
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
@@ -429,7 +440,6 @@
         const poetryScroll = document.getElementById('poetry-scroll');
 
         function renderLoop() {
-            // Only update layout positions if portal isn't actively covering
             if(!portal.classList.contains('active')) {
                 currentY += (targetY - currentY) * ease;
                 const roundedY = Math.round(currentY * 100) / 100;
@@ -448,7 +458,6 @@
                 }
             }
 
-            // Keep drawing mouse cursors and backgrounds globally
             liquidScale += (targetLiquidScale - liquidScale) * 0.1;
             displacementMap.setAttribute('scale', liquidScale);
 
